@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rentabilité Magazines — FranceMedia</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#F5F5F3;color:#1A1A1A;font-size:14px}
+.topbar{background:#1A1A1A;color:#fff;padding:0 1.5rem;height:48px;display:flex;align-items:center;justify-content:space-between}
+.topbar-title{font-size:15px;font-weight:500;letter-spacing:-.01em}
+.app-tabs{display:flex;gap:4px;background:#fff;border-bottom:1px solid #E5E5E3;padding:0 1.5rem}
+.app-tab{padding:12px 16px;font-size:13px;cursor:pointer;border-bottom:2px solid transparent;color:#666;transition:all .15s;background:none;border-top:none;border-left:none;border-right:none}
+.app-tab.active{color:#1A1A1A;border-bottom-color:#1A1A1A;font-weight:500}
+.app-tab:hover:not(.active){color:#1A1A1A}
+.main{padding:1.5rem;max-width:1200px;margin:0 auto}
+.tabs{display:flex;gap:6px;margin-bottom:1.5rem;flex-wrap:wrap;border-bottom:1px solid #E5E5E3;padding-bottom:10px}
+.tab{padding:6px 14px;border:1px solid transparent;border-radius:6px;font-size:13px;cursor:pointer;background:transparent;color:#666;transition:all .15s}
+.tab.active{background:#F0F0EE;color:#1A1A1A;border-color:#D5D5D3;font-weight:500}
+.tab:hover:not(.active){background:#F5F5F3}
+.section{display:none}.section.active{display:block}
+.card{background:#fff;border:1px solid #E5E5E3;border-radius:10px;padding:1rem 1.25rem;margin-bottom:1rem}
+.metric-card{background:#F5F5F3;border-radius:8px;padding:.875rem 1rem}
+.metric-label{font-size:11px;color:#888;margin-bottom:4px;text-transform:uppercase;letter-spacing:.04em}
+.metric-value{font-size:20px;font-weight:500;color:#1A1A1A}
+.positive{color:#0F6E56}.negative{color:#A32D2D}
+.grid4{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:1rem}
+.section-label{font-size:11px;font-weight:500;color:#888;text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px}
+.field{display:flex;flex-direction:column;gap:3px;margin-bottom:8px}
+.field label{font-size:12px;color:#666}
+.field input,.field select{font-size:13px;padding:6px 10px;height:32px;border:1px solid #D5D5D3;border-radius:6px;background:#fff;color:#1A1A1A;width:100%}
+.field input:focus,.field select:focus{outline:none;border-color:#1A1A1A}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.btn{padding:6px 14px;border-radius:6px;font-size:13px;cursor:pointer;border:1px solid #D5D5D3;background:#fff;color:#1A1A1A;transition:all .15s}
+.btn:hover{background:#F5F5F3}
+.btn-primary{background:#1A1A1A;color:#fff;border-color:transparent;font-weight:500}
+.btn-primary:hover{opacity:.85}
+.btn-sm{padding:4px 10px;font-size:12px;border-radius:6px;cursor:pointer;border:1px solid #D5D5D3;background:transparent;color:#666}
+.btn-sm:hover{background:#F5F5F3;color:#1A1A1A}
+.btn-danger{color:#A32D2D;border-color:#F09595;background:transparent}
+.btn-danger:hover{background:#FCEBEB}
+.sep{border:none;border-top:1px solid #E5E5E3;margin:1rem 0}
+.badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:99px;font-weight:500}
+.badge-pos{background:#E1F5EE;color:#085041}.badge-neg{background:#FCEBEB;color:#791F1F}
+.mag-sidebar{display:grid;grid-template-columns:200px 1fr;gap:1.5rem}
+.mag-list{display:flex;flex-direction:column;gap:6px}
+.mag-item{padding:8px 12px;border:1px solid #E5E5E3;border-radius:8px;cursor:pointer;transition:all .15s}
+.mag-item:hover{border-color:#1A1A1A;background:#F5F5F3}
+.mag-item.sel{border-color:#1A1A1A;background:#F0F0EE}
+.mag-name{font-size:13px;font-weight:500}
+.mag-meta{font-size:11px;color:#888;margin-top:2px}
+.num-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin-bottom:1rem}
+.num-card{border:1px solid #E5E5E3;border-radius:8px;overflow:hidden;cursor:pointer;transition:all .15s;background:#fff}
+.num-card:hover{border-color:#1A1A1A;transform:translateY(-1px);box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.num-card.sel{border-color:#1A1A1A;border-width:2px}
+.num-cover{width:100%;height:100px;object-fit:cover;display:block}
+.num-cover-placeholder{width:100%;height:100px;display:flex;align-items:center;justify-content:center;background:#F5F5F3;color:#aaa;font-size:11px;flex-direction:column;gap:4px}
+.num-info{padding:8px}
+.num-title{font-size:12px;font-weight:500}
+.num-result{font-size:11px;margin-top:2px}
+.timeline{display:flex;flex-direction:column;gap:10px}
+.tl-item{display:grid;grid-template-columns:72px 110px 1fr 80px;gap:12px;align-items:center;padding:10px 14px;border:1px solid #E5E5E3;border-radius:8px;background:#fff}
+.tl-cover{width:48px;height:62px;object-fit:cover;border-radius:4px}
+.tl-no-cover{width:48px;height:62px;border-radius:4px;background:#F5F5F3;display:flex;align-items:center;justify-content:center;color:#ccc;font-size:18px}
+.tl-bar-wrap{flex:1;height:6px;background:#F0F0EE;border-radius:99px}
+.tl-bar{height:6px;border-radius:99px;min-width:2px}
+.upload-zone{border:1px dashed #D5D5D3;border-radius:8px;padding:1.5rem;text-align:center;cursor:pointer;color:#888;font-size:13px;transition:all .15s;margin-bottom:1rem}
+.upload-zone:hover{border-color:#1A1A1A;background:#F5F5F3}
+.cover-preview{width:80px;height:104px;object-fit:cover;border-radius:4px;border:1px solid #E5E5E3}
+.chart-wrap{position:relative;width:100%}
+.poste-row{display:grid;grid-template-columns:1fr 160px 32px;gap:8px;align-items:center;padding:8px 0;border-bottom:1px solid #F0F0EE}
+.poste-row:last-child{border-bottom:none}
+.mag-row{display:grid;grid-template-columns:1fr 140px 100px 140px;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid #F0F0EE}
+.mag-row:last-child{border-bottom:none}
+.highlight{background:#F0F0EE;border-radius:6px;padding:6px 12px;font-size:14px;font-weight:500;text-align:right}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;padding:8px 10px;font-size:11px;font-weight:500;color:#888;text-transform:uppercase;letter-spacing:.04em;border-bottom:1px solid #E5E5E3}
+td{padding:9px 10px;border-bottom:1px solid #F0F0EE;color:#1A1A1A;vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#F5F5F3}
+.loading{display:flex;align-items:center;justify-content:center;padding:3rem;color:#888;font-size:14px}
+.spinner{width:20px;height:20px;border:2px solid #E5E5E3;border-top-color:#1A1A1A;border-radius:50%;animation:spin .6s linear infinite;margin-right:10px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.badge-blue{display:inline-block;font-size:12px;padding:3px 10px;border-radius:99px;font-weight:500;background:#E6F1FB;color:#0C447C}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-title">📊 FranceMedia — Rentabilité</div>
+  <div id="conn-status" style="font-size:12px;color:#888">Connexion...</div>
+</div>
+
+<div class="app-tabs">
+  <button class="app-tab active" onclick="switchApp('dashboard')">Dashboard magazines</button>
+  <button class="app-tab" onclick="switchApp('frais')">Frais généraux</button>
+</div>
+
+<!-- ==================== DASHBOARD MAGAZINES ==================== -->
+<div id="app-dashboard" class="main">
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('synthese','dashboard')">Synthèse</button>
+    <button class="tab" onclick="switchTab('magazines','dashboard')">Magazines</button>
+    <button class="tab" onclick="switchTab('numeros','dashboard')">Numéros</button>
+    <button class="tab" onclick="switchTab('comparaison','dashboard')">Comparaison</button>
+  </div>
+
+  <div id="synthese" class="section active">
+    <div class="grid4" id="kpi-cards"><div class="loading"><div class="spinner"></div>Chargement...</div></div>
+    <div class="card">
+      <div class="section-label">Résultat net par numéro</div>
+      <div class="chart-wrap" style="height:250px"><canvas id="synthChart"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="section-label">Répartition des revenus par source</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:center">
+        <div class="chart-wrap" style="height:190px"><canvas id="revSourceChart"></canvas></div>
+        <div id="rev-src-legend" style="font-size:12px;display:flex;flex-direction:column;gap:5px;color:#888"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="magazines" class="section">
+    <div class="mag-sidebar">
+      <div>
+        <div class="section-label">Mes magazines</div>
+        <div class="mag-list" id="mag-list"></div>
+        <button class="btn btn-primary" style="width:100%;margin-top:8px" onclick="newMag()">+ Nouveau</button>
+      </div>
+      <div id="mag-form-area"><div class="loading"><div class="spinner"></div>Chargement...</div></div>
+    </div>
+  </div>
+
+  <div id="numeros" class="section">
+    <div class="mag-sidebar">
+      <div>
+        <div class="section-label">Magazine</div>
+        <div class="mag-list" id="num-mag-list"></div>
+      </div>
+      <div id="num-area"><div class="loading"><div class="spinner"></div>Sélectionnez un magazine</div></div>
+    </div>
+  </div>
+
+  <div id="comparaison" class="section">
+    <div class="card" style="margin-bottom:1rem">
+      <div class="section-label" style="margin-bottom:8px">Filtrer par magazine</div>
+      <div id="comp-filters" style="display:flex;flex-wrap:wrap;gap:8px"></div>
+    </div>
+    <div id="timeline-view"></div>
+  </div>
+</div>
+
+<!-- ==================== FRAIS GÉNÉRAUX ==================== -->
+<div id="app-frais" class="main" style="display:none">
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('fg-frais','frais')">Frais généraux</button>
+    <button class="tab" onclick="switchTab('fg-magazines','frais')">Publications</button>
+    <button class="tab" onclick="switchTab('fg-repartition','frais')">Répartition</button>
+  </div>
+
+  <div id="fg-frais" class="section active">
+    <div class="grid4" id="fg-kpis"></div>
+    <div class="card">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
+        <div class="section-label" style="margin-bottom:0">Postes de frais annuels</div>
+        <select id="fg-annee" onchange="loadFG()" style="font-size:13px;padding:4px 8px;height:28px;border:1px solid #D5D5D3;border-radius:6px"></select>
+      </div>
+      <div id="fg-postes-list"></div>
+      <hr class="sep">
+      <div style="display:flex;gap:8px;margin-top:4px">
+        <input type="text" id="new-poste-label" placeholder="Nouveau poste..." style="flex:1;font-size:13px;height:32px;border:1px solid #D5D5D3;border-radius:6px;padding:0 10px">
+        <button class="btn btn-primary btn-sm" onclick="addPoste()">+ Ajouter</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="fg-magazines" class="section">
+    <div class="card">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
+        <div class="section-label" style="margin-bottom:0">Publications</div>
+        <button class="btn btn-primary btn-sm" onclick="addFGMag()">+ Magazine</button>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 140px 100px 140px;gap:10px;padding:6px 0;margin-bottom:4px">
+        <span style="font-size:11px;font-weight:500;color:#888;text-transform:uppercase">Magazine</span>
+        <span style="font-size:11px;font-weight:500;color:#888;text-transform:uppercase">Périodicité</span>
+        <span style="font-size:11px;font-weight:500;color:#888;text-transform:uppercase">Parutions</span>
+        <span style="font-size:11px;font-weight:500;color:#888;text-transform:uppercase">Quote-part</span>
+      </div>
+      <div id="fg-mag-list"></div>
+    </div>
+  </div>
+
+  <div id="fg-repartition" class="section">
+    <div class="grid4" id="fg-rep-kpis"></div>
+    <div class="card">
+      <div class="section-label" style="margin-bottom:1rem">Quote-part par numéro</div>
+      <table><thead><tr>
+        <th>Magazine</th><th>Parutions/an</th>
+        <th style="text-align:right">Frais annuels</th>
+        <th style="text-align:right">Quote-part/numéro</th>
+      </tr></thead><tbody id="fg-rep-tbody"></tbody></table>
+    </div>
+    <div class="card">
+      <div class="section-label" style="margin-bottom:1rem">Détail par poste</div>
+      <div id="fg-rep-detail"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const SUPABASE_URL = 'https://aepkcmwcbiunvwynjfbj.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_6exNcCmj6e4fvBwt5oE1Aw_eTu6VZYx';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+const PERIODICITES = {mensuel:12,bimestriel:6,trimestriel:4,semestriel:2,annuel:1};
+const MOIS = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
+
+const REV_KEYS = [
+  {k:'venteKiosque',l:'Ventes kiosque papier'},
+  {k:'publicite',l:'Publicité'},
+  {k:'aboPapier',l:'Abonnements papier'},
+  {k:'aboNumerique',l:'Abonnements numérique'},
+  {k:'aboCollecteurs',l:'Abonnements collecteurs'},
+  {k:'kiosqueNumerique',l:'Kiosques numériques'},
+  {k:'licences',l:'Licences partenaires'},
+];
+const COUT_KEYS = [
+  {k:'impression',l:'Impression'},
+  {k:'papier',l:'Papier'},
+  {k:'distribution',l:'Distribution'},
+  {k:'redaction',l:'Rédaction'},
+  {k:'sr',l:'Secrétariat de rédaction (SR)'},
+  {k:'reglages',l:'Réglages'},
+  {k:'marketing',l:'Marketing'},
+  {k:'maquettes',l:'Maquettes'},
+  {k:'droits',l:'Droits d\'auteur / licences',toggle:true},
+  {k:'fraisGeneraux',l:'Frais généraux'},
+];
+
+let magazines = [];
+let selMagId = null, selNumId = null, selNumMagId = null;
+let charts = {};
+let currentApp = 'dashboard';
+
+// FG state
+let fgData = {postes:[], magazines:[]};
+let fgAnnee = new Date().getFullYear();
+
+// ==================== INIT ====================
+async function init() {
+  const {data, error} = await sb.from('magazines').select('id').limit(1);
+  document.getElementById('conn-status').textContent = error ? '❌ Hors ligne' : '🟢 Connecté';
+  await loadMagazines();
+  initFGAnnee();
+  await loadFG();
+}
+
+// ==================== NAVIGATION ====================
+function switchApp(app) {
+  currentApp = app;
+  document.getElementById('app-dashboard').style.display = app==='dashboard'?'block':'none';
+  document.getElementById('app-frais').style.display = app==='frais'?'block':'none';
+  document.querySelectorAll('.app-tab').forEach((t,i)=>{
+    t.classList.toggle('active', (i===0&&app==='dashboard')||(i===1&&app==='frais'));
+  });
+}
+
+function switchTab(name, app) {
+  const prefix = app==='frais' ? 'fg-' : '';
+  const sections = app==='frais'
+    ? ['fg-frais','fg-magazines','fg-repartition']
+    : ['synthese','magazines','numeros','comparaison'];
+  sections.forEach(s => {
+    const el = document.getElementById(s);
+    if(el) el.classList.toggle('active', s===name);
+  });
+  const tabs = app==='frais'
+    ? document.querySelectorAll('#app-frais .tab')
+    : document.querySelectorAll('#app-dashboard .tab');
+  const idx = sections.indexOf(name);
+  tabs.forEach((t,i) => t.classList.toggle('active', i===idx));
+  if(name==='comparaison') renderComparaison();
+  if(name==='fg-repartition') renderFGRepartition();
+  setTimeout(()=>renderSynthCharts(),60);
+}
+
+// ==================== HELPERS ====================
+function fmt(n){return new Intl.NumberFormat('fr-FR',{style:'currency',currency:'EUR',maximumFractionDigits:0}).format(n||0);}
+function calcNum(num){
+  const rev = Object.values(num.revenus||{}).reduce((a,b)=>a+(+b||0),0);
+  const cout = Object.values(num.couts||{}).reduce((a,b)=>a+(+b||0),0);
+  return{rev,cout,net:rev-cout,marge:rev>0?(rev-cout)/rev*100:0};
+}
+function calcMag(mag){
+  if(!mag.numeros||!mag.numeros.length) return{rev:0,cout:0,net:0,marge:0};
+  const rev = mag.numeros.reduce((a,n)=>a+calcNum(n).rev,0);
+  const cout = mag.numeros.reduce((a,n)=>a+calcNum(n).cout,0);
+  return{rev,cout,net:rev-cout,marge:rev>0?(rev-cout)/rev*100:0};
+}
+function destroyChart(k){if(charts[k]){charts[k].destroy();delete charts[k];}}
+
+// ==================== MAGAZINES ====================
+async function loadMagazines() {
+  const {data:mags} = await sb.from('magazines').select('*').order('created_at');
+  const {data:nums} = await sb.from('numeros').select('*').order('mois');
+  magazines = (mags||[]).map(m=>({
+    ...m,
+    numeros:(nums||[]).filter(n=>n.magazine_id===m.id)
+  }));
+  renderAll();
+}
+
+function renderAll(){
+  renderKPIs();
+  renderSynthCharts();
+  renderMagList();
+  renderNumMagList();
+  renderComparaison();
+}
+
+function renderKPIs(){
+  const allNums = magazines.flatMap(m=>m.numeros||[]);
+  const totalRev = allNums.reduce((a,n)=>a+calcNum(n).rev,0);
+  const totalNet = allNums.reduce((a,n)=>a+calcNum(n).net,0);
+  const rentables = allNums.filter(n=>calcNum(n).net>=0).length;
+  document.getElementById('kpi-cards').innerHTML=`
+    <div class="metric-card"><div class="metric-label">Magazines</div><div class="metric-value">${magazines.length}</div></div>
+    <div class="metric-card"><div class="metric-label">Numéros</div><div class="metric-value">${allNums.length}</div></div>
+    <div class="metric-card"><div class="metric-label">Revenus totaux</div><div class="metric-value">${fmt(totalRev)}</div></div>
+    <div class="metric-card"><div class="metric-label">Résultat net</div><div class="metric-value ${totalNet>=0?'positive':'negative'}">${fmt(totalNet)}</div></div>
+    <div class="metric-card"><div class="metric-label">Rentables</div><div class="metric-value">${rentables}/${allNums.length}</div></div>
+  `;
+}
+
+function renderSynthCharts(){
+  const allNums = magazines.flatMap(m=>(m.numeros||[]).map(n=>({...n,_mag:m})));
+  allNums.sort((a,b)=>a.mois-b.mois);
+  destroyChart('synth');
+  const ctx = document.getElementById('synthChart');
+  if(!ctx||!allNums.length) return;
+  charts.synth = new Chart(ctx.getContext('2d'),{
+    type:'bar',
+    data:{labels:allNums.map(n=>n.titre.length>14?n.titre.slice(0,14)+'…':n.titre),
+      datasets:[{label:'Résultat net',data:allNums.map(n=>Math.round(calcNum(n).net)),
+      backgroundColor:allNums.map(n=>calcNum(n).net>=0?'#1D9E75':'#D85A30'),borderRadius:3}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+      scales:{x:{grid:{display:false},ticks:{font:{size:11}}},y:{ticks:{callback:v=>fmt(v)}}}}
+  });
+  const srcTotals={};
+  REV_KEYS.forEach(rk=>{srcTotals[rk.l]=0;});
+  magazines.flatMap(m=>m.numeros||[]).forEach(n=>{REV_KEYS.forEach(rk=>{srcTotals[rk.l]+=(+((n.revenus||{})[rk.k])||0);});});
+  const srcVals=REV_KEYS.map(r=>srcTotals[r.l]);
+  const srcColors=['#1A1A1A','#1D9E75','#378ADD','#D85A30','#D4537E','#639922','#888'];
+  destroyChart('revSrc');
+  const ctx2=document.getElementById('revSourceChart');
+  if(!ctx2) return;
+  charts.revSrc=new Chart(ctx2.getContext('2d'),{type:'doughnut',
+    data:{labels:REV_KEYS.map(r=>r.l),datasets:[{data:srcVals,backgroundColor:srcColors,borderWidth:0}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},cutout:'62%'}});
+  const total=srcVals.reduce((a,b)=>a+b,0);
+  document.getElementById('rev-src-legend').innerHTML=REV_KEYS.map((r,i)=>
+    `<span style="display:flex;align-items:center;gap:6px"><span style="width:8px;height:8px;border-radius:2px;background:${srcColors[i]};flex-shrink:0"></span><span style="color:#1A1A1A">${r.l}</span><span style="margin-left:auto">${total>0?(srcVals[i]/total*100).toFixed(1):0}%</span></span>`).join('');
+}
+
+function renderMagList(){
+  const el=document.getElementById('mag-list');
+  el.innerHTML=magazines.map(m=>{
+    const c=calcMag(m);
+    return`<div class="mag-item ${m.id===selMagId?'sel':''}" onclick="selectMag('${m.id}')">
+      <div class="mag-name">${m.nom}</div>
+      <div class="mag-meta">${m.periodicite} · ${(m.numeros||[]).length} n°</div>
+      <div style="margin-top:4px"><span class="badge ${c.net>=0?'badge-pos':'badge-neg'}">${c.net>=0?'+':''}${fmt(c.net)}</span></div>
+    </div>`;
+  }).join('')||'<div style="color:#888;font-size:13px;padding:8px">Aucun magazine</div>';
+}
+
+function renderNumMagList(){
+  document.getElementById('num-mag-list').innerHTML=magazines.map(m=>
+    `<div class="mag-item ${m.id===selNumMagId?'sel':''}" onclick="selectNumMag('${m.id}')">${m.nom}<div class="mag-meta">${(m.numeros||[]).length} numéros</div></div>`).join('');
+}
+
+async function selectMag(id){
+  selMagId=id; renderMagList();
+  const m=magazines.find(x=>x.id===id);
+  renderMagForm(m);
+  switchTab('magazines','dashboard');
+}
+
+function renderMagForm(m){
+  const c=calcMag(m);
+  document.getElementById('mag-form-area').innerHTML=`
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
+      <div style="font-size:15px;font-weight:500">${m.nom}</div>
+      <button class="btn btn-danger btn-sm" onclick="deleteMag('${m.id}')">✕ Supprimer</button>
+    </div>
+    <div class="card">
+      <div class="section-label">Informations</div>
+      <div class="form-grid">
+        <div class="field"><label>Nom</label><input type="text" value="${m.nom}" onchange="updMag('${m.id}','nom',this.value)"></div>
+        <div class="field"><label>Périodicité</label><select onchange="updMag('${m.id}','periodicite',this.value)">${Object.keys(PERIODICITES).map(p=>`<option ${m.periodicite===p?'selected':''}>${p}</option>`).join('')}</select></div>
+        <div class="field"><label>Année</label><input type="number" value="${m.annee||new Date().getFullYear()}" min="2000" max="2030" onchange="updMag('${m.id}','annee',+this.value)"></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="section-label">Synthèse annuelle</div>
+      <div class="grid4">
+        <div class="metric-card"><div class="metric-label">Revenus</div><div class="metric-value">${fmt(c.rev)}</div></div>
+        <div class="metric-card"><div class="metric-label">Coûts</div><div class="metric-value">${fmt(c.cout)}</div></div>
+        <div class="metric-card"><div class="metric-label">Résultat net</div><div class="metric-value ${c.net>=0?'positive':'negative'}">${fmt(c.net)}</div></div>
+        <div class="metric-card"><div class="metric-label">Marge</div><div class="metric-value ${c.marge>=0?'positive':'negative'}">${c.marge.toFixed(1)}%</div></div>
+      </div>
+    </div>
+  `;
+}
+
+async function newMag(){
+  const {data,error}=await sb.from('magazines').insert({nom:'Nouveau magazine',periodicite:'mensuel',annee:new Date().getFullYear(),couleur:'#1A1A1A'}).select().single();
+  if(error){alert('Erreur: '+error.message);return;}
+  await loadMagazines();
+  selectMag(data.id);
+}
+
+async function updMag(id,field,val){
+  await sb.from('magazines').update({[field]:val}).eq('id',id);
+  await loadMagazines();
+}
+
+async function deleteMag(id){
+  if(!confirm('Supprimer ce magazine et tous ses numéros ?')) return;
+  await sb.from('magazines').delete().eq('id',id);
+  selMagId=null;
+  document.getElementById('mag-form-area').innerHTML='';
+  await loadMagazines();
+}
+
+// ==================== NUMÉROS ====================
+async function selectNumMag(id){
+  selNumMagId=id; selNumId=null;
+  renderNumMagList();
+  renderNumArea();
+  switchTab('numeros','dashboard');
+}
+
+function renderNumArea(){
+  const m=magazines.find(x=>x.id===selNumMagId);
+  if(!m){document.getElementById('num-area').innerHTML='';return;}
+  const sorted=[...(m.numeros||[])].sort((a,b)=>a.mois-b.mois);
+  document.getElementById('num-area').innerHTML=`
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
+      <div style="font-size:15px;font-weight:500">${m.nom}</div>
+      <button class="btn btn-primary btn-sm" onclick="addNum('${m.id}')">+ Numéro</button>
+    </div>
+    <div class="num-grid">${sorted.map(n=>renderNumCardHTML(n)).join('')}</div>
+    <div id="num-detail"></div>
+  `;
+  if(selNumId) renderNumDetail(selNumId);
+}
+
+function renderNumCardHTML(n){
+  const c=calcNum(n);
+  const sel=n.id===selNumId?'sel':'';
+  const coverHtml=n.cover_url?`<img src="${n.cover_url}" class="num-cover" alt="${n.titre}">`:`<div class="num-cover-placeholder">📷<span>Ajouter</span></div>`;
+  return`<div class="num-card ${sel}" onclick="selectNum('${n.id}')">
+    ${coverHtml}
+    <div class="num-info">
+      <div class="num-title">${n.titre}</div>
+      <div class="num-result ${c.net>=0?'positive':'negative'}">${c.net>=0?'+':''}${fmt(c.net)}</div>
+      <div style="font-size:10px;color:#888;margin-top:2px">${c.marge.toFixed(1)}% marge</div>
+    </div>
+  </div>`;
+}
+
+function selectNum(id){selNumId=id;renderNumArea();}
+
+function renderNumDetail(numId){
+  const m=magazines.find(x=>x.id===selNumMagId);
+  if(!m) return;
+  const n=(m.numeros||[]).find(x=>x.id===numId);
+  if(!n) return;
+  const c=calcNum(n);
+  const coverSection=n.cover_url?
+    `<div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:1rem">
+      <img src="${n.cover_url}" class="cover-preview" alt="couverture">
+      <button class="btn-sm" onclick="removeCover('${m.id}','${n.id}')">Supprimer</button>
+    </div>`:
+    `<div class="upload-zone" onclick="triggerUpload('${n.id}')">
+      📤<br>Cliquez pour ajouter la couverture
+    </div>
+    <input type="file" id="file-inp-${n.id}" accept="image/*" style="display:none" onchange="handleCover('${m.id}','${n.id}',this)">`;
+
+  const revRows=REV_KEYS.map(rk=>`<div class="field"><label>${rk.l}</label><input type="number" min="0" step="100" value="${(n.revenus||{})[rk.k]||0}" onchange="updNum('${m.id}','${n.id}','rev','${rk.k}',+this.value)"></div>`).join('');
+  const coutRows=COUT_KEYS.map(ck=>{
+    if(ck.toggle){
+      const checked=(n.couts||{})[ck.k]>0;
+      return`<div class="field">
+        <label style="display:flex;align-items:center;gap:6px">
+          <input type="checkbox" ${checked?'checked':''} onchange="toggleDroits('${m.id}','${n.id}',this.checked)" style="width:auto;height:auto">
+          ${ck.l}
+        </label>
+        ${checked?`<input type="number" min="0" step="100" value="${(n.couts||{})[ck.k]||0}" onchange="updNum('${m.id}','${n.id}','cout','${ck.k}',+this.value)">`:''}
+      </div>`;
+    }
+    return`<div class="field"><label>${ck.l}</label><input type="number" min="0" step="100" value="${(n.couts||{})[ck.k]||0}" onchange="updNum('${m.id}','${n.id}','cout','${ck.k}',+this.value)"></div>`;
+  }).join('');
+
+  document.getElementById('num-detail').innerHTML=`
+    <div class="card">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
+        <div style="font-size:14px;font-weight:500">${n.titre}</div>
+        <button class="btn btn-danger btn-sm" onclick="deleteNum('${m.id}','${n.id}')">✕</button>
+      </div>
+      <div class="form-grid" style="margin-bottom:1rem">
+        <div class="field"><label>Titre</label><input type="text" value="${n.titre}" onchange="updNumField('${m.id}','${n.id}','titre',this.value)"></div>
+        <div class="field"><label>Mois</label><select onchange="updNumField('${m.id}','${n.id}','mois',+this.value)">${MOIS.map((mo,i)=>`<option value="${i+1}" ${n.mois===i+1?'selected':''}>${mo}</option>`).join('')}</select></div>
+      </div>
+      ${coverSection}
+      <hr class="sep">
+      <div class="grid4" style="margin-bottom:1rem">
+        <div class="metric-card"><div class="metric-label">Revenus</div><div class="metric-value">${fmt(c.rev)}</div></div>
+        <div class="metric-card"><div class="metric-label">Coûts</div><div class="metric-value">${fmt(c.cout)}</div></div>
+        <div class="metric-card"><div class="metric-label">Résultat net</div><div class="metric-value ${c.net>=0?'positive':'negative'}">${fmt(c.net)}</div></div>
+        <div class="metric-card"><div class="metric-label">Marge</div><div class="metric-value ${c.marge>=0?'positive':'negative'}">${c.marge.toFixed(1)}%</div></div>
+      </div>
+      <hr class="sep">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+        <div><div class="section-label" style="margin-bottom:8px">Revenus</div>${revRows}</div>
+        <div><div class="section-label" style="margin-bottom:8px">Coûts</div>${coutRows}</div>
+      </div>
+    </div>
+  `;
+}
+
+async function addNum(magId){
+  const m=magazines.find(x=>x.id===magId);
+  if(!m) return;
+  const moisExistants=(m.numeros||[]).map(n=>n.mois);
+  let mois=1; while(moisExistants.includes(mois)&&mois<=12) mois++;
+  const titre=MOIS[mois-1]+' '+(m.annee||new Date().getFullYear());
+  const revEmpty={}; REV_KEYS.forEach(r=>revEmpty[r.k]=0);
+  const coutEmpty={}; COUT_KEYS.forEach(c=>coutEmpty[c.k]=0);
+  const {data,error}=await sb.from('numeros').insert({magazine_id:magId,mois,titre,cover_url:null,revenus:revEmpty,couts:coutEmpty}).select().single();
+  if(error){alert('Erreur: '+error.message);return;}
+  selNumId=data.id;
+  await loadMagazines();
+  renderNumArea();
+}
+
+async function updNum(magId,numId,type,key,val){
+  const m=magazines.find(x=>x.id===magId);
+  const n=(m?.numeros||[]).find(x=>x.id===numId);
+  if(!n) return;
+  if(type==='rev') n.revenus[key]=val; else n.couts[key]=val;
+  await sb.from('numeros').update({[type==='rev'?'revenus':'couts']:type==='rev'?n.revenus:n.couts}).eq('id',numId);
+  await loadMagazines();
+  renderNumArea();
+}
+
+async function toggleDroits(magId,numId,checked){
+  const m=magazines.find(x=>x.id===magId);
+  const n=(m?.numeros||[]).find(x=>x.id===numId);
+  if(!n) return;
+  n.couts.droits=checked?0:0;
+  await sb.from('numeros').update({couts:n.couts}).eq('id',numId);
+  await loadMagazines();
+  renderNumArea();
+}
+
+async function updNumField(magId,numId,field,val){
+  await sb.from('numeros').update({[field]:field==='mois'?+val:val}).eq('id',numId);
+  await loadMagazines();
+  renderNumArea();
+}
+
+async function deleteNum(magId,numId){
+  if(!confirm('Supprimer ce numéro ?')) return;
+  await sb.from('numeros').delete().eq('id',numId);
+  selNumId=null;
+  await loadMagazines();
+  renderNumArea();
+}
+
+function triggerUpload(numId){document.getElementById('file-inp-'+numId)?.click();}
+
+async function handleCover(magId,numId,input){
+  const file=input.files[0]; if(!file) return;
+  const ext=file.name.split('.').pop();
+  const path=`covers/${numId}.${ext}`;
+  const {error:upErr}=await sb.storage.from('covers').upload(path,file,{upsert:true});
+  if(upErr){alert('Erreur upload: '+upErr.message);return;}
+  const {data}=sb.storage.from('covers').getPublicUrl(path);
+  await sb.from('numeros').update({cover_url:data.publicUrl}).eq('id',numId);
+  await loadMagazines();
+  renderNumArea();
+}
+
+async function removeCover(magId,numId){
+  await sb.from('numeros').update({cover_url:null}).eq('id',numId);
+  await loadMagazines();
+  renderNumArea();
+}
+
+// ==================== COMPARAISON ====================
+function renderComparaison(){
+  const filters=document.getElementById('comp-filters');
+  if(!filters) return;
+  const active=Array.from(filters.querySelectorAll('.btn.active')).map(b=>b.dataset.id);
+  const selIds=active.length?active:magazines.map(m=>m.id);
+  filters.innerHTML=magazines.map(m=>`<button class="btn ${selIds.includes(m.id)?'active':''} btn-sm" data-id="${m.id}" onclick="toggleCompFilter('${m.id}')">${m.nom}</button>`).join('');
+  renderTimeline(selIds);
+}
+
+function toggleCompFilter(id){
+  const filters=document.getElementById('comp-filters');
+  const btn=filters.querySelector(`[data-id="${id}"]`);
+  btn.classList.toggle('active');
+  const active=Array.from(filters.querySelectorAll('.btn.active')).map(b=>b.dataset.id);
+  renderTimeline(active.length?active:magazines.map(m=>m.id));
+}
+
+function renderTimeline(magIds){
+  const tv=document.getElementById('timeline-view');
+  if(!tv) return;
+  const allNums=magazines.filter(m=>magIds.includes(m.id)).flatMap(m=>(m.numeros||[]).map(n=>({...n,_mag:m})));
+  allNums.sort((a,b)=>a.mois-b.mois);
+  if(!allNums.length){tv.innerHTML='<div style="text-align:center;padding:2rem;color:#888">Aucun numéro</div>';return;}
+  const maxAbs=Math.max(...allNums.map(n=>Math.abs(calcNum(n).net)),1);
+  tv.innerHTML=`<div class="timeline">${allNums.map(n=>{
+    const c=calcNum(n);
+    const pct=Math.min(Math.abs(c.net)/maxAbs*100,100);
+    const coverHtml=n.cover_url?`<img src="${n.cover_url}" class="tl-cover" alt="${n.titre}">`:`<div class="tl-no-cover">📷</div>`;
+    return`<div class="tl-item">
+      ${coverHtml}
+      <div>
+        <div style="font-size:12px;font-weight:500">${n.titre}</div>
+        <div style="font-size:11px;color:#888;margin-top:2px">${n._mag.nom}</div>
+        <span class="badge ${c.net>=0?'badge-pos':'badge-neg'}" style="margin-top:4px;display:inline-block">${c.net>=0?'+':''}${fmt(c.net)}</span>
+      </div>
+      <div>
+        <div class="tl-bar-wrap"><div class="tl-bar" style="width:${pct}%;background:${c.net>=0?'#1D9E75':'#D85A30'}"></div></div>
+        <div style="font-size:11px;color:#888;margin-top:4px">${fmt(c.rev)} rev. · ${fmt(c.cout)} coûts</div>
+      </div>
+      <div style="text-align:right">
+        <div class="${c.marge>=0?'positive':'negative'}" style="font-weight:500;font-size:13px">${c.marge.toFixed(1)}%</div>
+        <div style="color:#888;font-size:11px">marge</div>
+      </div>
+    </div>`;
+  }).join('')}</div>`;
+}
+
+// ==================== FRAIS GÉNÉRAUX ====================
+const FG_POSTES_DEFAULT=[
+  'Loyer / locaux','Salaires & charges fixes','Salaires transverses & coûts de structure',
+  'Téléphone / internet','Assurances','Comptabilité / juridique',
+  'Fournitures de bureau','Déplacements','Informatique / logiciels'
+];
+
+function initFGAnnee(){
+  const sel=document.getElementById('fg-annee');
+  const annee=new Date().getFullYear();
+  [annee-1,annee,annee+1].forEach(a=>{
+    const opt=document.createElement('option');
+    opt.value=a; opt.textContent=a;
+    if(a===annee) opt.selected=true;
+    sel.appendChild(opt);
+  });
+  fgAnnee=annee;
+}
+
+async function loadFG(){
+  fgAnnee=+document.getElementById('fg-annee')?.value||new Date().getFullYear();
+  const {data}=await sb.from('frais_generaux').select('*').eq('annee',fgAnnee).single();
+  if(data){
+    fgData={postes:data.postes||[],magazines:fgData.magazines};
+  } else {
+    fgData.postes=FG_POSTES_DEFAULT.map((l,i)=>({id:i+1,label:l,montant:0}));
+  }
+  const {data:fgMags}=await sb.from('frais_generaux').select('magazines').eq('annee',fgAnnee).single();
+  fgData.magazines=fgMags?.magazines||magazines.map(m=>({id:m.id,nom:m.nom,periodicite:m.periodicite||'mensuel'}));
+  renderFG();
+}
+
+async function saveFG(){
+  const {data:existing}=await sb.from('frais_generaux').select('id').eq('annee',fgAnnee).single();
+  const payload={annee:fgAnnee,postes:fgData.postes,magazines:fgData.magazines};
+  if(existing){
+    await sb.from('frais_generaux').update(payload).eq('annee',fgAnnee);
+  } else {
+    await sb.from('frais_generaux').insert(payload);
+  }
+}
+
+function fgTotal(){return fgData.postes.reduce((a,p)=>a+(+p.montant||0),0);}
+function fgParutions(m){return PERIODICITES[m.periodicite]||12;}
+function fgTotalParutions(){return fgData.magazines.reduce((a,m)=>a+fgParutions(m),0);}
+function fgQuotePartNum(){const tp=fgTotalParutions();return tp>0?fgTotal()/tp:0;}
+
+function renderFG(){
+  renderFGKPIs();
+  renderFGPostes();
+  renderFGMags();
+  renderFGRepartition();
+}
+
+function renderFGKPIs(){
+  const total=fgTotal(), tp=fgTotalParutions(), qpn=fgQuotePartNum();
+  document.getElementById('fg-kpis').innerHTML=`
+    <div class="metric-card"><div class="metric-label">Total frais ${fgAnnee}</div><div class="metric-value">${fmt(total)}</div></div>
+    <div class="metric-card"><div class="metric-label">Parutions totales</div><div class="metric-value">${tp}</div></div>
+    <div class="metric-card"><div class="metric-label">Quote-part / numéro</div><div class="metric-value">${fmt(qpn)}</div></div>
+  `;
+}
+
+function renderFGPostes(){
+  document.getElementById('fg-postes-list').innerHTML=fgData.postes.map(p=>`
+    <div class="poste-row">
+      <div style="font-size:13px">${p.label}</div>
+      <input style="font-size:13px;padding:5px 10px;height:30px;text-align:right;border:1px solid #D5D5D3;border-radius:6px;width:100%" type="number" min="0" step="100" value="${p.montant||0}" onchange="setPosteMontant(${p.id},+this.value)">
+      <button class="btn-sm btn-danger" onclick="deletePoste(${p.id})">✕</button>
+    </div>`).join('');
+}
+
+function setPosteMontant(id,val){
+  const p=fgData.postes.find(x=>x.id===id);
+  if(p){p.montant=val;saveFG();renderFG();}
+}
+
+function addPoste(){
+  const inp=document.getElementById('new-poste-label');
+  const label=inp.value.trim(); if(!label) return;
+  fgData.postes.push({id:Date.now(),label,montant:0});
+  inp.value='';
+  saveFG();renderFG();
+}
+
+function deletePoste(id){
+  fgData.postes=fgData.postes.filter(p=>p.id!==id);
+  saveFG();renderFG();
+}
+
+function renderFGMags(){
+  const total=fgTotal(), tp=fgTotalParutions();
+  document.getElementById('fg-mag-list').innerHTML=fgData.magazines.map(m=>{
+    const p=fgParutions(m), qp=tp>0?total/tp:0;
+    return`<div class="mag-row">
+      <input type="text" value="${m.nom}" style="font-size:13px;height:30px;border:1px solid #D5D5D3;border-radius:6px;padding:0 8px" onchange="updFGMag('${m.id}','nom',this.value)">
+      <select onchange="updFGMag('${m.id}','periodicite',this.value)" style="font-size:13px;height:30px;border:1px solid #D5D5D3;border-radius:6px">${Object.keys(PERIODICITES).map(k=>`<option value="${k}" ${m.periodicite===k?'selected':''}>${k}</option>`).join('')}</select>
+      <div style="font-size:14px;font-weight:500;text-align:center">${p}/an</div>
+      <div class="highlight">${fmt(qp)}</div>
+    </div>`;
+  }).join('');
+}
+
+function updFGMag(id,field,val){
+  const m=fgData.magazines.find(x=>x.id===id);
+  if(m){m[field]=val;saveFG();renderFG();}
+}
+
+function addFGMag(){
+  fgData.magazines.push({id:'m'+Date.now(),nom:'Nouveau magazine',periodicite:'mensuel'});
+  saveFG();renderFG();
+  switchTab('fg-magazines','frais');
+}
+
+function renderFGRepartition(){
+  const total=fgTotal(), tp=fgTotalParutions(), qpn=fgQuotePartNum();
+  document.getElementById('fg-rep-kpis').innerHTML=`
+    <div class="metric-card"><div class="metric-label">Frais ${fgAnnee}</div><div class="metric-value">${fmt(total)}</div></div>
+    <div class="metric-card"><div class="metric-label">Parutions</div><div class="metric-value">${tp}</div></div>
+    <div class="metric-card"><div class="metric-label">Quote-part/numéro</div><div class="metric-value">${fmt(qpn)}</div></div>
+  `;
+  document.getElementById('fg-rep-tbody').innerHTML=fgData.magazines.map(m=>{
+    const p=fgParutions(m), partMag=qpn*p;
+    return`<tr><td style="font-weight:500">${m.nom}</td><td>${p}</td><td style="text-align:right">${fmt(partMag)}</td><td style="text-align:right"><span class="badge-blue">${fmt(qpn)}</span></td></tr>`;
+  }).join('')+`<tr style="font-weight:500;border-top:1px solid #D5D5D3"><td>Total</td><td>${tp}</td><td style="text-align:right">${fmt(total)}</td><td></td></tr>`;
+
+  document.getElementById('fg-rep-detail').innerHTML=`<table><thead><tr><th>Poste</th><th style="text-align:right">Montant annuel</th>${fgData.magazines.map(m=>`<th style="text-align:right">${m.nom}</th>`).join('')}</tr></thead><tbody>
+    ${fgData.postes.map(p=>`<tr><td>${p.label}</td><td style="text-align:right">${fmt(p.montant)}</td>${fgData.magazines.map(()=>`<td style="text-align:right;color:#888">${fmt(tp>0?(p.montant||0)/tp:0)}</td>`).join('')}</tr>`).join('')}
+    <tr style="font-weight:500"><td>Total</td><td style="text-align:right">${fmt(total)}</td>${fgData.magazines.map(()=>`<td style="text-align:right"><span class="badge-blue">${fmt(qpn)}</span></td>`).join('')}</tr>
+  </tbody></table>`;
+}
+
+init();
+</script>
+</body>
+</html>
