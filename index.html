@@ -33,6 +33,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .metric-value{font-size:20px;font-weight:500;color:#1A1A1A}
 .positive{color:#0F6E56}.negative{color:#A32D2D}
 .grid4{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:1rem}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-bottom:1rem}
 .section-label{font-size:11px;font-weight:500;color:#888;text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px}
 .field{display:flex;flex-direction:column;gap:3px;margin-bottom:8px}
 .field label{font-size:12px;color:#666}
@@ -51,13 +52,16 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .sep{border:none;border-top:1px solid #E5E5E3;margin:1rem 0}
 .badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:99px;font-weight:500}
 .badge-pos{background:#E1F5EE;color:#085041}.badge-neg{background:#FCEBEB;color:#791F1F}
-.mag-sidebar{display:grid;grid-template-columns:200px 1fr;gap:1.5rem}
-.mag-list{display:flex;flex-direction:column;gap:6px}
+.mag-sidebar{display:grid;grid-template-columns:220px 1fr;gap:1.5rem}
+.mag-list{display:flex;flex-direction:column;gap:6px;max-height:70vh;overflow-y:auto}
 .mag-item{padding:8px 12px;border:1px solid #E5E5E3;border-radius:8px;cursor:pointer;transition:all .15s}
 .mag-item:hover{border-color:#1A1A1A;background:#F5F5F3}
 .mag-item.sel{border-color:#1A1A1A;background:#F0F0EE}
 .mag-name{font-size:13px;font-weight:500}
 .mag-meta{font-size:11px;color:#888;margin-top:2px}
+.pole-group{margin-bottom:1rem}
+.pole-group-title{font-size:11px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:.05em;padding:6px 0 4px;border-bottom:1px solid #E5E5E3;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between}
+.pole-dot{width:10px;height:10px;border-radius:50%;display:inline-block;margin-right:6px;flex-shrink:0}
 .num-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin-bottom:1rem}
 .num-card{border:1px solid #E5E5E3;border-radius:8px;overflow:hidden;cursor:pointer;transition:all .15s;background:#fff}
 .num-card:hover{border-color:#1A1A1A;transform:translateY(-1px);box-shadow:0 2px 8px rgba(0,0,0,.06)}
@@ -68,7 +72,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .num-title{font-size:12px;font-weight:500}
 .num-result{font-size:11px;margin-top:2px}
 .timeline{display:flex;flex-direction:column;gap:10px}
-.tl-item{display:grid;grid-template-columns:72px 130px 1fr 80px;gap:12px;align-items:center;padding:10px 14px;border:1px solid #E5E5E3;border-radius:8px;background:#fff}
+.tl-item{display:grid;grid-template-columns:72px 150px 1fr 80px;gap:12px;align-items:center;padding:10px 14px;border:1px solid #E5E5E3;border-radius:8px;background:#fff}
 .tl-cover{width:48px;height:62px;object-fit:cover;border-radius:4px}
 .tl-no-cover{width:48px;height:62px;border-radius:4px;background:#F5F5F3;display:flex;align-items:center;justify-content:center;color:#ccc;font-size:18px}
 .tl-bar-wrap{flex:1;height:6px;background:#F0F0EE;border-radius:99px}
@@ -91,12 +95,20 @@ tr:hover td{background:#F5F5F3}
 .spinner{width:20px;height:20px;border:2px solid #E5E5E3;border-top-color:#1A1A1A;border-radius:50%;animation:spin .6s linear infinite;margin-right:10px}
 @keyframes spin{to{transform:rotate(360deg)}}
 .badge-blue{display:inline-block;font-size:12px;padding:3px 10px;border-radius:99px;font-weight:500;background:#E6F1FB;color:#0C447C}
-.year-banner{background:#E6F1FB;border:1px solid #BDD7F5;border-radius:8px;padding:8px 14px;margin-bottom:1rem;font-size:13px;color:#0C447C;display:flex;align-items:center;gap:6px}
+.year-banner{background:#E6F1FB;border:1px solid #BDD7F5;border-radius:8px;padding:8px 14px;margin-bottom:1rem;font-size:13px;color:#0C447C}
 .empty-year{text-align:center;padding:3rem 1rem;color:#888;font-size:14px}
+.pole-card{background:#fff;border:1px solid #E5E5E3;border-radius:10px;padding:1rem 1.25rem;margin-bottom:1rem;border-left:4px solid #1A1A1A}
+.pole-kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px;margin:10px 0}
+.pole-mag-list{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.pole-mag-chip{font-size:12px;padding:3px 10px;border-radius:99px;background:#F0F0EE;color:#1A1A1A}
+.pole-edit-row{display:flex;gap:8px;align-items:center;padding:10px 0;border-bottom:1px solid #F0F0EE}
+.pole-edit-row:last-child{border-bottom:none}
+.color-dot{width:18px;height:18px;border-radius:50%;cursor:pointer;border:2px solid transparent;flex-shrink:0}
+.color-dot.sel{border-color:#1A1A1A}
 </style>
 </head>
 <body>
- 
+
 <div class="topbar">
   <div class="topbar-title">📊 FranceMedia — Rentabilité</div>
   <div class="year-selector">
@@ -105,27 +117,32 @@ tr:hover td{background:#F5F5F3}
   </div>
   <div id="conn-status" class="conn-status">Connexion...</div>
 </div>
- 
+
 <div class="app-tabs">
   <button class="app-tab active" onclick="switchApp('dashboard')">Dashboard magazines</button>
   <button class="app-tab" onclick="switchApp('frais')">Frais généraux</button>
 </div>
- 
+
 <!-- ==================== DASHBOARD ==================== -->
 <div id="app-dashboard" class="main">
   <div class="tabs">
     <button class="tab active" onclick="switchTab('synthese','dashboard')">Synthèse</button>
+    <button class="tab" onclick="switchTab('poles-view','dashboard')">Pôles</button>
     <button class="tab" onclick="switchTab('magazines','dashboard')">Magazines</button>
     <button class="tab" onclick="switchTab('numeros','dashboard')">Numéros</button>
     <button class="tab" onclick="switchTab('comparaison','dashboard')">Comparaison</button>
   </div>
- 
+
   <div id="synthese" class="section active">
     <div class="year-banner" id="year-banner"></div>
     <div class="grid4" id="kpi-cards"><div class="loading"><div class="spinner"></div>Chargement...</div></div>
     <div class="card">
       <div class="section-label">Résultat net par numéro</div>
       <div class="chart-wrap" style="height:250px"><canvas id="synthChart"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="section-label">Résultat net par pôle</div>
+      <div class="chart-wrap" style="height:220px"><canvas id="poleChart"></canvas></div>
     </div>
     <div class="card">
       <div class="section-label">Répartition des revenus par source</div>
@@ -135,7 +152,28 @@ tr:hover td{background:#F5F5F3}
       </div>
     </div>
   </div>
- 
+
+  <div id="poles-view" class="section">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
+      <div style="font-size:15px;font-weight:500">Mes pôles — <span id="poles-year-label"></span></div>
+      <button class="btn btn-primary btn-sm" onclick="showAddPole()">+ Nouveau pôle</button>
+    </div>
+    <div id="poles-add-form" style="display:none" class="card">
+      <div class="section-label">Nouveau pôle</div>
+      <div class="form-grid" style="margin-bottom:10px">
+        <div class="field"><label>Nom du pôle</label><input type="text" id="new-pole-nom" placeholder="Ex: Pôle Moteur"></div>
+        <div class="field"><label>Couleur</label>
+          <div style="display:flex;gap:8px;margin-top:4px" id="color-picker"></div>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-primary btn-sm" onclick="createPole()">Créer</button>
+        <button class="btn btn-sm" onclick="hidePoleForm()">Annuler</button>
+      </div>
+    </div>
+    <div id="poles-list-view"></div>
+  </div>
+
   <div id="magazines" class="section">
     <div class="mag-sidebar">
       <div>
@@ -146,7 +184,7 @@ tr:hover td{background:#F5F5F3}
       <div id="mag-form-area"><div class="loading"><div class="spinner"></div>Sélectionnez un magazine</div></div>
     </div>
   </div>
- 
+
   <div id="numeros" class="section">
     <div class="mag-sidebar">
       <div>
@@ -156,16 +194,18 @@ tr:hover td{background:#F5F5F3}
       <div id="num-area"><div style="padding:3rem 1rem;text-align:center;color:#888">Sélectionnez un magazine</div></div>
     </div>
   </div>
- 
+
   <div id="comparaison" class="section">
     <div class="card" style="margin-bottom:1rem">
-      <div class="section-label" style="margin-bottom:8px">Filtrer par magazine</div>
+      <div class="section-label" style="margin-bottom:8px">Filtrer par pôle</div>
+      <div id="pole-filters" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px"></div>
+      <div class="section-label" style="margin-bottom:8px;margin-top:8px">Filtrer par magazine</div>
       <div id="comp-filters" style="display:flex;flex-wrap:wrap;gap:8px"></div>
     </div>
     <div id="timeline-view"></div>
   </div>
 </div>
- 
+
 <!-- ==================== FRAIS GÉNÉRAUX ==================== -->
 <div id="app-frais" class="main" style="display:none">
   <div class="tabs">
@@ -173,9 +213,8 @@ tr:hover td{background:#F5F5F3}
     <button class="tab" onclick="switchTab('fg-magazines','frais')">Publications</button>
     <button class="tab" onclick="switchTab('fg-repartition','frais')">Répartition</button>
   </div>
- 
   <div id="fg-frais" class="section active">
-    <div class="grid4" id="fg-kpis"></div>
+    <div class="grid3" id="fg-kpis"></div>
     <div class="card">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
         <div class="section-label" style="margin-bottom:0">Postes de frais — <span id="fg-annee-label"></span></div>
@@ -188,7 +227,6 @@ tr:hover td{background:#F5F5F3}
       </div>
     </div>
   </div>
- 
   <div id="fg-magazines" class="section">
     <div class="card">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
@@ -204,16 +242,11 @@ tr:hover td{background:#F5F5F3}
       <div id="fg-mag-list"></div>
     </div>
   </div>
- 
   <div id="fg-repartition" class="section">
-    <div class="grid4" id="fg-rep-kpis"></div>
+    <div class="grid3" id="fg-rep-kpis"></div>
     <div class="card">
       <div class="section-label" style="margin-bottom:1rem">Quote-part par numéro</div>
-      <table><thead><tr>
-        <th>Magazine</th><th>Parutions/an</th>
-        <th style="text-align:right">Frais annuels</th>
-        <th style="text-align:right">Quote-part/numéro</th>
-      </tr></thead><tbody id="fg-rep-tbody"></tbody></table>
+      <table><thead><tr><th>Magazine</th><th>Parutions/an</th><th style="text-align:right">Frais annuels</th><th style="text-align:right">Quote-part/numéro</th></tr></thead><tbody id="fg-rep-tbody"></tbody></table>
     </div>
     <div class="card">
       <div class="section-label" style="margin-bottom:1rem">Détail par poste</div>
@@ -221,94 +254,70 @@ tr:hover td{background:#F5F5F3}
     </div>
   </div>
 </div>
- 
+
 <script>
-const SUPABASE_URL = 'https://aepkcmwcbiunvwynjfbj.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_6exNcCmj6e4fvBwt5oE1Aw_eTu6VZYx';
-const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
- 
-const PERIODICITES = {mensuel:12,bimestriel:6,trimestriel:4,semestriel:2,annuel:1};
-const MOIS = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
- 
-const REV_KEYS = [
-  {k:'venteKiosque',l:'Ventes kiosque papier'},
-  {k:'publicite',l:'Publicité'},
-  {k:'aboPapier',l:'Abonnements papier'},
-  {k:'aboNumerique',l:'Abonnements numérique'},
-  {k:'aboCollecteurs',l:'Abonnements collecteurs'},
-  {k:'kiosqueNumerique',l:'Kiosques numériques'},
+const SUPABASE_URL='https://aepkcmwcbiunvwynjfbj.supabase.co';
+const SUPABASE_KEY='sb_publishable_6exNcCmj6e4fvBwt5oE1Aw_eTu6VZYx';
+const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+
+const PERIODICITES={mensuel:12,bimestriel:6,trimestriel:4,semestriel:2,annuel:1};
+const MOIS=['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
+const POLE_COLORS=['#1A1A1A','#D85A30','#1D9E75','#378ADD','#D4537E','#7F77DD','#BA7517','#639922','#888780'];
+
+const REV_KEYS=[
+  {k:'venteKiosque',l:'Ventes kiosque papier'},{k:'publicite',l:'Publicité'},
+  {k:'aboPapier',l:'Abonnements papier'},{k:'aboNumerique',l:'Abonnements numérique'},
+  {k:'aboCollecteurs',l:'Abonnements collecteurs'},{k:'kiosqueNumerique',l:'Kiosques numériques'},
   {k:'licences',l:'Licences partenaires'},
 ];
-const COUT_KEYS = [
-  {k:'impression',l:'Impression'},
-  {k:'papier',l:'Papier'},
-  {k:'distribution',l:'Distribution'},
-  {k:'redaction',l:'Rédaction'},
-  {k:'sr',l:'Secrétariat de rédaction (SR)'},
-  {k:'reglages',l:'Réglages'},
-  {k:'marketing',l:'Marketing'},
-  {k:'maquettes',l:'Maquettes'},
-  {k:'droits',l:'Droits d\'auteur / licences',toggle:true},
-  {k:'fraisGeneraux',l:'Frais généraux'},
+const COUT_KEYS=[
+  {k:'impression',l:'Impression'},{k:'papier',l:'Papier'},{k:'distribution',l:'Distribution'},
+  {k:'redaction',l:'Rédaction'},{k:'sr',l:'Secrétariat de rédaction (SR)'},{k:'reglages',l:'Réglages'},
+  {k:'marketing',l:'Marketing'},{k:'maquettes',l:'Maquettes'},
+  {k:'droits',l:'Droits d\'auteur / licences',toggle:true},{k:'fraisGeneraux',l:'Frais généraux'},
 ];
- 
-let magazines = [];
-let selMagId = null, selNumId = null, selNumMagId = null;
-let charts = {};
-let currentApp = 'dashboard';
-let selectedYear = new Date().getFullYear();
-let availableYears = [];
- 
-// FG
-let fgData = {postes:[], magazines:[]};
- 
+
+let magazines=[],poles=[];
+let selMagId=null,selNumId=null,selNumMagId=null;
+let charts={};
+let selectedYear=new Date().getFullYear();
+let fgData={postes:[],magazines:[]};
+
 // ==================== ANNÉE ====================
-function buildYearButtons() {
-  const container = document.getElementById('year-btns');
-  const currentY = new Date().getFullYear();
-  // Années disponibles : basées sur les numéros + années courante/précédente
-  const years = new Set([currentY - 1, currentY, currentY + 1]);
-  magazines.forEach(m => (m.numeros||[]).forEach(n => { if(n.annee) years.add(n.annee); }));
-  availableYears = [...years].sort((a,b) => a - b);
-  container.innerHTML = availableYears.map(y =>
-    `<button class="year-btn ${y===selectedYear?'active':''}" onclick="setYear(${y})">${y}</button>`
-  ).join('');
-  document.getElementById('year-banner').textContent = `📅 Affichage de l'année ${selectedYear}`;
-  const fgLabel = document.getElementById('fg-annee-label');
-  if(fgLabel) fgLabel.textContent = selectedYear;
+function buildYearButtons(){
+  const container=document.getElementById('year-btns');
+  const currentY=new Date().getFullYear();
+  const years=new Set([currentY-1,currentY,currentY+1]);
+  magazines.forEach(m=>(m.numeros||[]).forEach(n=>{if(n.annee)years.add(n.annee);}));
+  const sorted=[...years].sort((a,b)=>a-b);
+  container.innerHTML=sorted.map(y=>`<button class="year-btn ${y===selectedYear?'active':''}" onclick="setYear(${y})">${y}</button>`).join('');
+  document.getElementById('year-banner').textContent='Affichage de l\'année '+selectedYear;
+  const fgLabel=document.getElementById('fg-annee-label');
+  if(fgLabel)fgLabel.textContent=selectedYear;
+  const plLabel=document.getElementById('poles-year-label');
+  if(plLabel)plLabel.textContent=selectedYear;
 }
- 
-function setYear(y) {
-  selectedYear = y;
-  buildYearButtons();
-  renderAll();
-  loadFG();
-}
- 
+
+function setYear(y){selectedYear=y;buildYearButtons();renderAll();loadFG();}
+
 // ==================== NAVIGATION ====================
-function switchApp(app) {
-  currentApp = app;
-  document.getElementById('app-dashboard').style.display = app==='dashboard'?'block':'none';
-  document.getElementById('app-frais').style.display = app==='frais'?'block':'none';
-  document.querySelectorAll('.app-tab').forEach((t,i) => {
-    t.classList.toggle('active', (i===0&&app==='dashboard')||(i===1&&app==='frais'));
-  });
+function switchApp(app){
+  document.getElementById('app-dashboard').style.display=app==='dashboard'?'block':'none';
+  document.getElementById('app-frais').style.display=app==='frais'?'block':'none';
+  document.querySelectorAll('.app-tab').forEach((t,i)=>t.classList.toggle('active',(i===0&&app==='dashboard')||(i===1&&app==='frais')));
 }
- 
-function switchTab(name, app) {
-  const sections = app==='frais'
-    ? ['fg-frais','fg-magazines','fg-repartition']
-    : ['synthese','magazines','numeros','comparaison'];
-  sections.forEach(s => { const el=document.getElementById(s); if(el) el.classList.toggle('active', s===name); });
-  const tabs = app==='frais'
-    ? document.querySelectorAll('#app-frais .tab')
-    : document.querySelectorAll('#app-dashboard .tab');
-  tabs.forEach((t,i) => t.classList.toggle('active', i===sections.indexOf(name)));
-  if(name==='comparaison') renderComparaison();
-  if(name==='fg-repartition') renderFGRepartition();
+
+function switchTab(name,app){
+  const sections=app==='frais'?['fg-frais','fg-magazines','fg-repartition']:['synthese','poles-view','magazines','numeros','comparaison'];
+  sections.forEach(s=>{const el=document.getElementById(s);if(el)el.classList.toggle('active',s===name);});
+  const tabs=app==='frais'?document.querySelectorAll('#app-frais .tab'):document.querySelectorAll('#app-dashboard .tab');
+  tabs.forEach((t,i)=>t.classList.toggle('active',i===sections.indexOf(name)));
+  if(name==='comparaison')renderComparaison();
+  if(name==='poles-view')renderPolesView();
+  if(name==='fg-repartition')renderFGRepartition();
   setTimeout(()=>renderSynthCharts(),60);
 }
- 
+
 // ==================== HELPERS ====================
 function fmt(n){return new Intl.NumberFormat('fr-FR',{style:'currency',currency:'EUR',maximumFractionDigits:0}).format(n||0);}
 function calcNum(num){
@@ -316,75 +325,97 @@ function calcNum(num){
   const cout=Object.values(num.couts||{}).reduce((a,b)=>a+(+b||0),0);
   return{rev,cout,net:rev-cout,marge:rev>0?(rev-cout)/rev*100:0};
 }
-function numsForYear(mag) {
-  return (mag.numeros||[]).filter(n => (n.annee||new Date().getFullYear()) === selectedYear);
-}
-function calcMagYear(mag) {
-  const nums = numsForYear(mag);
-  if(!nums.length) return{rev:0,cout:0,net:0,marge:0,count:0};
+function numsForYear(mag){return(mag.numeros||[]).filter(n=>(n.annee||new Date().getFullYear())===selectedYear);}
+function calcMagYear(mag){
+  const nums=numsForYear(mag);
+  if(!nums.length)return{rev:0,cout:0,net:0,marge:0,count:0};
   const rev=nums.reduce((a,n)=>a+calcNum(n).rev,0);
   const cout=nums.reduce((a,n)=>a+calcNum(n).cout,0);
   return{rev,cout,net:rev-cout,marge:rev>0?(rev-cout)/rev*100:0,count:nums.length};
 }
+function calcPoleYear(pole){
+  const mags=magazines.filter(m=>m.pole_id===pole.id);
+  const rev=mags.reduce((a,m)=>a+calcMagYear(m).rev,0);
+  const cout=mags.reduce((a,m)=>a+calcMagYear(m).cout,0);
+  return{rev,cout,net:rev-cout,marge:rev>0?(rev-cout)/rev*100:0,count:mags.length};
+}
+function poleColor(poleId){const p=poles.find(x=>x.id===poleId);return p?p.couleur:'#888';}
+function poleNom(poleId){const p=poles.find(x=>x.id===poleId);return p?p.nom:'Sans pôle';}
 function destroyChart(k){if(charts[k]){charts[k].destroy();delete charts[k];}}
- 
-// ==================== LOAD ====================
-async function init() {
-  const {data,error} = await sb.from('magazines').select('id').limit(1);
-  document.getElementById('conn-status').textContent = error ? '❌ Hors ligne' : '🟢 Connecté';
-  await loadMagazines();
+
+// ==================== INIT ====================
+async function init(){
+  const {data,error}=await sb.from('magazines').select('id').limit(1);
+  document.getElementById('conn-status').textContent=error?'❌ Hors ligne':'🟢 Connecté';
+  await loadAll();
   await loadFG();
 }
- 
-async function loadMagazines() {
-  const {data:mags} = await sb.from('magazines').select('*').order('created_at');
-  const {data:nums} = await sb.from('numeros').select('*').order('annee,mois');
-  magazines = (mags||[]).map(m=>({...m, numeros:(nums||[]).filter(n=>n.magazine_id===m.id)}));
+
+async function loadAll(){
+  const {data:pl}=await sb.from('poles').select('*').order('created_at');
+  poles=pl||[];
+  const {data:mags}=await sb.from('magazines').select('*').order('created_at');
+  const {data:nums}=await sb.from('numeros').select('*').order('annee,mois');
+  magazines=(mags||[]).map(m=>({...m,numeros:(nums||[]).filter(n=>n.magazine_id===m.id)}));
   buildYearButtons();
   renderAll();
 }
- 
+
 function renderAll(){
   renderKPIs();
   renderSynthCharts();
   renderMagList();
   renderNumMagList();
   renderComparaison();
+  renderPolesView();
 }
- 
+
 // ==================== KPIs ====================
 function renderKPIs(){
-  const allNums = magazines.flatMap(m=>numsForYear(m));
-  const totalRev = allNums.reduce((a,n)=>a+calcNum(n).rev,0);
-  const totalNet = allNums.reduce((a,n)=>a+calcNum(n).net,0);
-  const rentables = allNums.filter(n=>calcNum(n).net>=0).length;
+  const allNums=magazines.flatMap(m=>numsForYear(m));
+  const totalRev=allNums.reduce((a,n)=>a+calcNum(n).rev,0);
+  const totalNet=allNums.reduce((a,n)=>a+calcNum(n).net,0);
+  const rentables=allNums.filter(n=>calcNum(n).net>=0).length;
   document.getElementById('kpi-cards').innerHTML=`
     <div class="metric-card"><div class="metric-label">Magazines</div><div class="metric-value">${magazines.length}</div></div>
+    <div class="metric-card"><div class="metric-label">Pôles</div><div class="metric-value">${poles.length}</div></div>
     <div class="metric-card"><div class="metric-label">Numéros ${selectedYear}</div><div class="metric-value">${allNums.length}</div></div>
     <div class="metric-card"><div class="metric-label">Revenus ${selectedYear}</div><div class="metric-value">${fmt(totalRev)}</div></div>
     <div class="metric-card"><div class="metric-label">Résultat net</div><div class="metric-value ${totalNet>=0?'positive':'negative'}">${fmt(totalNet)}</div></div>
     <div class="metric-card"><div class="metric-label">Rentables</div><div class="metric-value">${rentables}/${allNums.length}</div></div>
   `;
 }
- 
+
 // ==================== GRAPHIQUES ====================
 function renderSynthCharts(){
-  const allNums = magazines.flatMap(m=>numsForYear(m).map(n=>({...n,_mag:m}))).sort((a,b)=>a.mois-b.mois);
+  const allNums=magazines.flatMap(m=>numsForYear(m).map(n=>({...n,_mag:m}))).sort((a,b)=>a.mois-b.mois);
   destroyChart('synth');
   const ctx=document.getElementById('synthChart');
-  if(ctx) {
-    if(!allNums.length){ctx.parentElement.innerHTML='<div class="empty-year">Aucun numéro pour '+selectedYear+'</div>';return;}
-    charts.synth=new Chart(ctx.getContext('2d'),{
-      type:'bar',
-      data:{labels:allNums.map(n=>n.titre.length>16?n.titre.slice(0,16)+'…':n.titre),
-        datasets:[{label:'Résultat net',data:allNums.map(n=>Math.round(calcNum(n).net)),
-        backgroundColor:allNums.map(n=>calcNum(n).net>=0?'#1D9E75':'#D85A30'),borderRadius:3}]},
-      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
-        scales:{x:{grid:{display:false},ticks:{font:{size:11}}},y:{ticks:{callback:v=>fmt(v)}}}}
-    });
+  if(ctx){
+    if(!allNums.length){ctx.parentElement.innerHTML='<div class="empty-year">Aucun numéro pour '+selectedYear+'</div>';}
+    else{
+      charts.synth=new Chart(ctx.getContext('2d'),{type:'bar',
+        data:{labels:allNums.map(n=>n.titre.length>14?n.titre.slice(0,14)+'…':n.titre),
+          datasets:[{label:'Résultat net',data:allNums.map(n=>Math.round(calcNum(n).net)),
+          backgroundColor:allNums.map(n=>calcNum(n).net>=0?'#1D9E75':'#D85A30'),borderRadius:3}]},
+        options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+          scales:{x:{grid:{display:false},ticks:{font:{size:11}}},y:{ticks:{callback:v=>fmt(v)}}}}});
+    }
   }
-  const srcTotals={};
-  REV_KEYS.forEach(rk=>{srcTotals[rk.l]=0;});
+  // Graphique pôles
+  destroyChart('pole');
+  const poleCtx=document.getElementById('poleChart');
+  if(poleCtx&&poles.length){
+    const poleData=poles.map(p=>({nom:p.nom,net:calcPoleYear(p).net,color:p.couleur}));
+    const sans={nom:'Sans pôle',net:magazines.filter(m=>!m.pole_id).reduce((a,m)=>a+calcMagYear(m).net,0),color:'#888'};
+    const all=[...poleData,sans].filter(p=>p.net!==0||poleData.length<10);
+    charts.pole=new Chart(poleCtx.getContext('2d'),{type:'bar',
+      data:{labels:all.map(p=>p.nom),datasets:[{label:'Résultat net',data:all.map(p=>Math.round(p.net)),backgroundColor:all.map(p=>p.net>=0?p.color:'#D85A30'),borderRadius:4}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+        scales:{x:{grid:{display:false}},y:{ticks:{callback:v=>fmt(v)}}}}});
+  }
+  // Graphique revenus par source
+  const srcTotals={};REV_KEYS.forEach(rk=>{srcTotals[rk.l]=0;});
   allNums.forEach(n=>{REV_KEYS.forEach(rk=>{srcTotals[rk.l]+=(+((n.revenus||{})[rk.k])||0);});});
   const srcVals=REV_KEYS.map(r=>srcTotals[r.l]);
   const srcColors=['#1A1A1A','#1D9E75','#378ADD','#D85A30','#D4537E','#639922','#888'];
@@ -395,34 +426,136 @@ function renderSynthCharts(){
       data:{labels:REV_KEYS.map(r=>r.l),datasets:[{data:srcVals,backgroundColor:srcColors,borderWidth:0}]},
       options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},cutout:'62%'}});
     const total=srcVals.reduce((a,b)=>a+b,0);
-    document.getElementById('rev-src-legend').innerHTML=REV_KEYS.map((r,i)=>
-      `<span style="display:flex;align-items:center;gap:6px"><span style="width:8px;height:8px;border-radius:2px;background:${srcColors[i]};flex-shrink:0"></span><span style="color:#1A1A1A">${r.l}</span><span style="margin-left:auto">${total>0?(srcVals[i]/total*100).toFixed(1):0}%</span></span>`).join('');
+    document.getElementById('rev-src-legend').innerHTML=REV_KEYS.map((r,i)=>`<span style="display:flex;align-items:center;gap:6px"><span style="width:8px;height:8px;border-radius:2px;background:${srcColors[i]};flex-shrink:0"></span><span>${r.l}</span><span style="margin-left:auto">${total>0?(srcVals[i]/total*100).toFixed(1):0}%</span></span>`).join('');
   }
 }
- 
+
+// ==================== PÔLES VIEW ====================
+function renderPolesView(){
+  const plLabel=document.getElementById('poles-year-label');
+  if(plLabel)plLabel.textContent=selectedYear;
+  const container=document.getElementById('poles-list-view');
+  if(!container)return;
+  if(!poles.length){
+    container.innerHTML='<div class="empty-year">Aucun pôle créé — cliquez sur "+ Nouveau pôle" pour commencer</div>';
+    return;
+  }
+  container.innerHTML=poles.map(p=>{
+    const c=calcPoleYear(p);
+    const mags=magazines.filter(m=>m.pole_id===p.id);
+    return`<div class="pole-card" style="border-left-color:${p.couleur}">
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <div style="display:flex;align-items:center;gap:10px">
+          <span class="pole-dot" style="background:${p.couleur}"></span>
+          <div style="font-size:15px;font-weight:600">${p.nom}</div>
+          <div style="font-size:12px;color:#888">${mags.length} magazine(s)</div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <button class="btn-sm" onclick="editPole('${p.id}')">✏️ Modifier</button>
+          <button class="btn-sm btn-danger" onclick="deletePole('${p.id}')">✕</button>
+        </div>
+      </div>
+      <div class="pole-kpi-grid">
+        <div class="metric-card"><div class="metric-label">Revenus ${selectedYear}</div><div class="metric-value">${fmt(c.rev)}</div></div>
+        <div class="metric-card"><div class="metric-label">Coûts</div><div class="metric-value">${fmt(c.cout)}</div></div>
+        <div class="metric-card"><div class="metric-label">Résultat net</div><div class="metric-value ${c.net>=0?'positive':'negative'}">${fmt(c.net)}</div></div>
+        <div class="metric-card"><div class="metric-label">Marge</div><div class="metric-value ${c.marge>=0?'positive':'negative'}">${c.marge.toFixed(1)}%</div></div>
+      </div>
+      <div class="pole-mag-list">${mags.map(m=>`<span class="pole-mag-chip">${m.nom}</span>`).join('')}</div>
+    </div>`;
+  }).join('');
+  // Sans pôle
+  const sansPole=magazines.filter(m=>!m.pole_id);
+  if(sansPole.length){
+    const rev=sansPole.reduce((a,m)=>a+calcMagYear(m).rev,0);
+    const net=sansPole.reduce((a,m)=>a+calcMagYear(m).net,0);
+    container.innerHTML+=`<div class="pole-card" style="border-left-color:#888;opacity:.7">
+      <div style="font-size:14px;font-weight:500;color:#888;margin-bottom:8px">Sans pôle (${sansPole.length})</div>
+      <div class="pole-mag-list">${sansPole.map(m=>`<span class="pole-mag-chip">${m.nom}</span>`).join('')}</div>
+    </div>`;
+  }
+}
+
+function showAddPole(){
+  document.getElementById('poles-add-form').style.display='block';
+  const cp=document.getElementById('color-picker');
+  cp.innerHTML=POLE_COLORS.map((c,i)=>`<span class="color-dot ${i===0?'sel':''}" style="background:${c}" data-color="${c}" onclick="selectColor(this)"></span>`).join('');
+}
+function hidePoleForm(){document.getElementById('poles-add-form').style.display='none';}
+function selectColor(el){document.querySelectorAll('.color-dot').forEach(d=>d.classList.remove('sel'));el.classList.add('sel');}
+
+async function createPole(){
+  const nom=document.getElementById('new-pole-nom').value.trim();
+  if(!nom)return;
+  const selColor=document.querySelector('.color-dot.sel');
+  const couleur=selColor?selColor.dataset.color:'#1A1A1A';
+  await sb.from('poles').insert({nom,couleur});
+  document.getElementById('new-pole-nom').value='';
+  hidePoleForm();
+  await loadAll();
+}
+
+async function deletePole(id){
+  if(!confirm('Supprimer ce pôle ? Les magazines seront désassociés.'))return;
+  await sb.from('poles').delete().eq('id',id);
+  await loadAll();
+}
+
+async function editPole(id){
+  const p=poles.find(x=>x.id===id);
+  if(!p)return;
+  const nom=prompt('Nouveau nom du pôle :',p.nom);
+  if(!nom)return;
+  await sb.from('poles').update({nom}).eq('id',id);
+  await loadAll();
+}
+
 // ==================== MAGAZINES ====================
 function renderMagList(){
-  document.getElementById('mag-list').innerHTML=magazines.map(m=>{
-    const c=calcMagYear(m);
-    const count=numsForYear(m).length;
-    return`<div class="mag-item ${m.id===selMagId?'sel':''}" onclick="selectMag('${m.id}')">
-      <div class="mag-name">${m.nom}</div>
-      <div class="mag-meta">${m.periodicite} · ${count} n° en ${selectedYear}</div>
-      <div style="margin-top:4px"><span class="badge ${c.net>=0?'badge-pos':'badge-neg'}">${count?((c.net>=0?'+':'')+fmt(c.net)):'—'}</span></div>
-    </div>`;
-  }).join('')||'<div style="color:#888;font-size:13px;padding:8px">Aucun magazine</div>';
+  const el=document.getElementById('mag-list');
+  // Grouper par pôle
+  const groups={};
+  poles.forEach(p=>{groups[p.id]=[];});
+  groups['__none']=[];
+  magazines.forEach(m=>{
+    if(m.pole_id&&groups[m.pole_id])groups[m.pole_id].push(m);
+    else groups['__none'].push(m);
+  });
+  let html='';
+  poles.forEach(p=>{
+    if(!groups[p.id].length)return;
+    html+=`<div class="pole-group"><div class="pole-group-title"><span><span class="pole-dot" style="background:${p.couleur}"></span>${p.nom}</span><span style="font-size:10px">${groups[p.id].length} mag</span></div>`;
+    html+=groups[p.id].map(m=>renderMagItem(m)).join('');
+    html+='</div>';
+  });
+  if(groups['__none'].length){
+    html+=`<div class="pole-group"><div class="pole-group-title">Sans pôle</div>`;
+    html+=groups['__none'].map(m=>renderMagItem(m)).join('');
+    html+='</div>';
+  }
+  el.innerHTML=html||'<div style="color:#888;font-size:13px;padding:8px">Aucun magazine</div>';
 }
- 
+
+function renderMagItem(m){
+  const c=calcMagYear(m);
+  const count=numsForYear(m).length;
+  return`<div class="mag-item ${m.id===selMagId?'sel':''}" onclick="selectMag('${m.id}')">
+    <div class="mag-name">${m.nom}</div>
+    <div class="mag-meta">${m.periodicite} · ${count} n° en ${selectedYear}</div>
+    <div style="margin-top:4px"><span class="badge ${c.net>=0?'badge-pos':'badge-neg'}">${count?(c.net>=0?'+':'')+fmt(c.net):'—'}</span></div>
+  </div>`;
+}
+
 async function selectMag(id){
-  selMagId=id; renderMagList();
+  selMagId=id;renderMagList();
   renderMagForm(magazines.find(x=>x.id===id));
   switchTab('magazines','dashboard');
 }
- 
+
 function renderMagForm(m){
-  const nums=numsForYear(m), c=calcMagYear(m);
-  // Graphique par numéro pour ce magazine sur l'année sélectionnée
-  const chartHtml = nums.length ? `<div class="chart-wrap" style="height:160px;margin-top:1rem"><canvas id="mag-chart-${m.id}"></canvas></div>` : '';
+  const nums=numsForYear(m),c=calcMagYear(m);
+  const chartHtml=nums.length?`<div class="chart-wrap" style="height:160px;margin-top:1rem"><canvas id="mag-chart-${m.id}"></canvas></div>`:'';
+  const poleOptions=`<option value="">— Sans pôle —</option>`+poles.map(p=>`<option value="${p.id}" ${m.pole_id===p.id?'selected':''}>${p.nom}</option>`).join('');
   document.getElementById('mag-form-area').innerHTML=`
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
       <div style="font-size:15px;font-weight:500">${m.nom}</div>
@@ -430,103 +563,110 @@ function renderMagForm(m){
     </div>
     <div class="card">
       <div class="section-label">Informations</div>
-      <div class="form-grid">
+      <div class="form-grid3">
         <div class="field"><label>Nom</label><input type="text" value="${m.nom}" onchange="updMag('${m.id}','nom',this.value)"></div>
         <div class="field"><label>Périodicité</label><select onchange="updMag('${m.id}','periodicite',this.value)">${Object.keys(PERIODICITES).map(p=>`<option ${m.periodicite===p?'selected':''}>${p}</option>`).join('')}</select></div>
+        <div class="field"><label>Pôle</label><select onchange="updMagPole('${m.id}',this.value)">${poleOptions}</select></div>
       </div>
     </div>
     <div class="card">
       <div class="section-label">Résultats ${selectedYear} — ${nums.length} numéro(s)</div>
-      ${nums.length ? `<div class="grid4">
+      ${nums.length?`<div class="grid4">
         <div class="metric-card"><div class="metric-label">Revenus</div><div class="metric-value">${fmt(c.rev)}</div></div>
         <div class="metric-card"><div class="metric-label">Coûts</div><div class="metric-value">${fmt(c.cout)}</div></div>
         <div class="metric-card"><div class="metric-label">Résultat net</div><div class="metric-value ${c.net>=0?'positive':'negative'}">${fmt(c.net)}</div></div>
-        <div class="metric-card"><div class="metric-label">Marge moy.</div><div class="metric-value ${c.marge>=0?'positive':'negative'}">${c.marge.toFixed(1)}%</div></div>
-      </div>${chartHtml}` : `<div class="empty-year">Aucun numéro saisi pour ${selectedYear}</div>`}
+        <div class="metric-card"><div class="metric-label">Marge</div><div class="metric-value ${c.marge>=0?'positive':'negative'}">${c.marge.toFixed(1)}%</div></div>
+      </div>${chartHtml}`:`<div class="empty-year">Aucun numéro saisi pour ${selectedYear}</div>`}
     </div>
   `;
-  // Rendu du graphique par numéro
-  if(nums.length) {
+  if(nums.length){
     setTimeout(()=>{
       const canvas=document.getElementById(`mag-chart-${m.id}`);
-      if(!canvas) return;
+      if(!canvas)return;
       destroyChart('mag-detail');
-      charts['mag-detail']=new Chart(canvas.getContext('2d'),{
-        type:'bar',
-        data:{labels:nums.sort((a,b)=>a.mois-b.mois).map(n=>n.titre.length>12?n.titre.slice(0,12)+'…':n.titre),
-          datasets:[{label:'Résultat net',data:nums.map(n=>Math.round(calcNum(n).net)),
-          backgroundColor:nums.map(n=>calcNum(n).net>=0?'#1D9E75':'#D85A30'),borderRadius:3}]},
+      const sorted=nums.sort((a,b)=>a.mois-b.mois);
+      charts['mag-detail']=new Chart(canvas.getContext('2d'),{type:'bar',
+        data:{labels:sorted.map(n=>n.titre.length>12?n.titre.slice(0,12)+'…':n.titre),
+          datasets:[{label:'Résultat net',data:sorted.map(n=>Math.round(calcNum(n).net)),
+          backgroundColor:sorted.map(n=>calcNum(n).net>=0?'#1D9E75':'#D85A30'),borderRadius:3}]},
         options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
-          scales:{x:{grid:{display:false}},y:{ticks:{callback:v=>fmt(v)}}}}
-      });
+          scales:{x:{grid:{display:false}},y:{ticks:{callback:v=>fmt(v)}}}}});
     },50);
   }
 }
- 
+
+async function updMagPole(id,poleId){
+  await sb.from('magazines').update({pole_id:poleId||null}).eq('id',id);
+  await loadAll();
+  selectMag(id);
+}
+
 async function newMag(){
   const {data,error}=await sb.from('magazines').insert({nom:'Nouveau magazine',periodicite:'mensuel',couleur:'#1A1A1A'}).select().single();
   if(error){alert('Erreur: '+error.message);return;}
-  await loadMagazines();
-  selectMag(data.id);
+  await loadAll();selectMag(data.id);
 }
- 
+
 async function updMag(id,field,val){
   await sb.from('magazines').update({[field]:val}).eq('id',id);
-  await loadMagazines();
+  await loadAll();
 }
- 
+
 async function deleteMag(id){
-  if(!confirm('Supprimer ce magazine et tous ses numéros ?')) return;
+  if(!confirm('Supprimer ce magazine et tous ses numéros ?'))return;
   await sb.from('magazines').delete().eq('id',id);
-  selMagId=null;
-  document.getElementById('mag-form-area').innerHTML='';
-  await loadMagazines();
+  selMagId=null;document.getElementById('mag-form-area').innerHTML='';
+  await loadAll();
 }
- 
+
 // ==================== NUMÉROS ====================
 function renderNumMagList(){
-  document.getElementById('num-mag-list').innerHTML=magazines.map(m=>`
-    <div class="mag-item ${m.id===selNumMagId?'sel':''}" onclick="selectNumMag('${m.id}')">
-      ${m.nom}<div class="mag-meta">${numsForYear(m).length} numéros en ${selectedYear}</div>
-    </div>`).join('');
+  // Grouper par pôle aussi
+  const groups={};
+  poles.forEach(p=>{groups[p.id]=[];});
+  groups['__none']=[];
+  magazines.forEach(m=>{if(m.pole_id&&groups[m.pole_id])groups[m.pole_id].push(m);else groups['__none'].push(m);});
+  let html='';
+  poles.forEach(p=>{
+    if(!groups[p.id].length)return;
+    html+=`<div class="pole-group-title" style="font-size:10px;padding:4px 0 2px"><span class="pole-dot" style="background:${p.couleur}"></span>${p.nom}</div>`;
+    html+=groups[p.id].map(m=>`<div class="mag-item ${m.id===selNumMagId?'sel':''}" onclick="selectNumMag('${m.id}')">${m.nom}<div class="mag-meta">${numsForYear(m).length} numéros en ${selectedYear}</div></div>`).join('');
+  });
+  if(groups['__none'].length){
+    html+=`<div class="pole-group-title" style="font-size:10px;padding:4px 0 2px">Sans pôle</div>`;
+    html+=groups['__none'].map(m=>`<div class="mag-item ${m.id===selNumMagId?'sel':''}" onclick="selectNumMag('${m.id}')">${m.nom}<div class="mag-meta">${numsForYear(m).length} numéros en ${selectedYear}</div></div>`).join('');
+  }
+  document.getElementById('num-mag-list').innerHTML=html;
 }
- 
-async function selectNumMag(id){
-  selNumMagId=id; selNumId=null;
-  renderNumMagList(); renderNumArea();
-  switchTab('numeros','dashboard');
-}
- 
+
+async function selectNumMag(id){selNumMagId=id;selNumId=null;renderNumMagList();renderNumArea();switchTab('numeros','dashboard');}
+
 function renderNumArea(){
   const m=magazines.find(x=>x.id===selNumMagId);
   if(!m){document.getElementById('num-area').innerHTML='';return;}
   const allNums=[...(m.numeros||[])].sort((a,b)=>a.annee===b.annee?a.mois-b.mois:a.annee-b.annee);
-  // Grouper par année
   const byYear={};
-  allNums.forEach(n=>{const y=n.annee||selectedYear; if(!byYear[y])byYear[y]=[]; byYear[y].push(n);});
+  allNums.forEach(n=>{const y=n.annee||selectedYear;if(!byYear[y])byYear[y]=[];byYear[y].push(n);});
   const yearsWithNums=Object.keys(byYear).map(Number).sort((a,b)=>a-b);
   document.getElementById('num-area').innerHTML=`
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
       <div style="font-size:15px;font-weight:500">${m.nom}</div>
       <button class="btn btn-primary btn-sm" onclick="addNum('${m.id}')">+ Numéro</button>
     </div>
-    ${yearsWithNums.map(y=>`
-      <div style="margin-bottom:1rem">
-        <div style="font-size:12px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px;display:flex;align-items:center;gap:8px">
-          <span>${y}</span>
-          <span style="font-size:11px;font-weight:400">${byYear[y].length} numéro(s) · ${fmt(byYear[y].reduce((a,n)=>a+calcNum(n).net,0))} net</span>
-        </div>
-        <div class="num-grid">${byYear[y].map(n=>renderNumCardHTML(n)).join('')}</div>
-      </div>`).join('')}
+    ${yearsWithNums.map(y=>`<div style="margin-bottom:1rem">
+      <div style="font-size:12px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px;display:flex;align-items:center;gap:8px">
+        <span>${y}</span><span style="font-size:11px;font-weight:400">${byYear[y].length} numéro(s) · ${fmt(byYear[y].reduce((a,n)=>a+calcNum(n).net,0))} net</span>
+      </div>
+      <div class="num-grid">${byYear[y].map(n=>renderNumCardHTML(n)).join('')}</div>
+    </div>`).join('')}
     ${!allNums.length?'<div class="empty-year">Aucun numéro — cliquez sur "+ Numéro" pour commencer</div>':''}
     <div id="num-detail"></div>
   `;
-  if(selNumId) renderNumDetail(selNumId);
+  if(selNumId)renderNumDetail(selNumId);
 }
- 
+
 function renderNumCardHTML(n){
-  const c=calcNum(n);
-  const sel=n.id===selNumId?'sel':'';
+  const c=calcNum(n);const sel=n.id===selNumId?'sel':'';
   const coverHtml=n.cover_url?`<img src="${n.cover_url}" class="num-cover" alt="${n.titre}">`:`<div class="num-cover-placeholder">📷<span>Ajouter</span></div>`;
   return`<div class="num-card ${sel}" onclick="selectNum('${n.id}')">
     ${coverHtml}
@@ -537,32 +677,21 @@ function renderNumCardHTML(n){
     </div>
   </div>`;
 }
- 
+
 function selectNum(id){selNumId=id;renderNumArea();}
- 
+
 function renderNumDetail(numId){
-  const m=magazines.find(x=>x.id===selNumMagId);
-  if(!m) return;
-  const n=(m.numeros||[]).find(x=>x.id===numId);
-  if(!n) return;
+  const m=magazines.find(x=>x.id===selNumMagId);if(!m)return;
+  const n=(m.numeros||[]).find(x=>x.id===numId);if(!n)return;
   const c=calcNum(n);
   const coverSection=n.cover_url?
-    `<div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:1rem">
-      <img src="${n.cover_url}" class="cover-preview" alt="couverture">
-      <button class="btn-sm" onclick="removeCover('${m.id}','${n.id}')">Supprimer</button>
-    </div>`:
-    `<div class="upload-zone" onclick="triggerUpload('${n.id}')">📤<br>Cliquez pour ajouter la couverture</div>
-    <input type="file" id="file-inp-${n.id}" accept="image/*" style="display:none" onchange="handleCover('${m.id}','${n.id}',this)">`;
- 
+    `<div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:1rem"><img src="${n.cover_url}" class="cover-preview" alt="couverture"><button class="btn-sm" onclick="removeCover('${m.id}','${n.id}')">Supprimer</button></div>`:
+    `<div class="upload-zone" onclick="triggerUpload('${n.id}')">📤<br>Cliquez pour ajouter la couverture</div><input type="file" id="file-inp-${n.id}" accept="image/*" style="display:none" onchange="handleCover('${m.id}','${n.id}',this)">`;
   const revRows=REV_KEYS.map(rk=>`<div class="field"><label>${rk.l}</label><input type="number" min="0" step="100" value="${(n.revenus||{})[rk.k]||0}" onchange="updNum('${m.id}','${n.id}','rev','${rk.k}',+this.value)"></div>`).join('');
   const coutRows=COUT_KEYS.map(ck=>{
-    if(ck.toggle){
-      const checked=(n.couts||{})[ck.k]>0;
-      return`<div class="field"><label style="display:flex;align-items:center;gap:6px"><input type="checkbox" ${checked?'checked':''} onchange="toggleDroits('${m.id}','${n.id}',this.checked)" style="width:auto;height:auto">${ck.l}</label>${checked?`<input type="number" min="0" step="100" value="${(n.couts||{})[ck.k]||0}" onchange="updNum('${m.id}','${n.id}','cout','${ck.k}',+this.value)">`:''}</div>`;
-    }
+    if(ck.toggle){const checked=(n.couts||{})[ck.k]>0;return`<div class="field"><label style="display:flex;align-items:center;gap:6px"><input type="checkbox" ${checked?'checked':''} onchange="toggleDroits('${m.id}','${n.id}',this.checked)" style="width:auto;height:auto">${ck.l}</label>${checked?`<input type="number" min="0" step="100" value="${(n.couts||{})[ck.k]||0}" onchange="updNum('${m.id}','${n.id}','cout','${ck.k}',+this.value)">`:''}</div>`;}
     return`<div class="field"><label>${ck.l}</label><input type="number" min="0" step="100" value="${(n.couts||{})[ck.k]||0}" onchange="updNum('${m.id}','${n.id}','cout','${ck.k}',+this.value)"></div>`;
   }).join('');
- 
   document.getElementById('num-detail').innerHTML=`
     <div class="card">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
@@ -590,98 +719,107 @@ function renderNumDetail(numId){
     </div>
   `;
 }
- 
+
 async function addNum(magId){
-  const m=magazines.find(x=>x.id===magId); if(!m) return;
+  const m=magazines.find(x=>x.id===magId);if(!m)return;
   const numsYear=(m.numeros||[]).filter(n=>(n.annee||selectedYear)===selectedYear);
   const moisPris=numsYear.map(n=>n.mois);
-  let mois=1; while(moisPris.includes(mois)&&mois<=12) mois++;
+  let mois=1;while(moisPris.includes(mois)&&mois<=12)mois++;
   const titre=MOIS[mois-1]+' '+selectedYear;
-  const revEmpty={}; REV_KEYS.forEach(r=>revEmpty[r.k]=0);
-  const coutEmpty={}; COUT_KEYS.forEach(c=>coutEmpty[c.k]=0);
+  const revEmpty={};REV_KEYS.forEach(r=>revEmpty[r.k]=0);
+  const coutEmpty={};COUT_KEYS.forEach(c=>coutEmpty[c.k]=0);
   const {data,error}=await sb.from('numeros').insert({magazine_id:magId,mois,annee:selectedYear,titre,cover_url:null,revenus:revEmpty,couts:coutEmpty}).select().single();
   if(error){alert('Erreur: '+error.message);return;}
-  selNumId=data.id;
-  await loadMagazines();
-  renderNumArea();
+  selNumId=data.id;await loadAll();renderNumArea();
 }
- 
+
 async function updNum(magId,numId,type,key,val){
   const m=magazines.find(x=>x.id===magId);
-  const n=(m?.numeros||[]).find(x=>x.id===numId); if(!n) return;
-  if(type==='rev') n.revenus[key]=val; else n.couts[key]=val;
+  const n=(m?.numeros||[]).find(x=>x.id===numId);if(!n)return;
+  if(type==='rev')n.revenus[key]=val;else n.couts[key]=val;
   await sb.from('numeros').update({[type==='rev'?'revenus':'couts']:type==='rev'?n.revenus:n.couts}).eq('id',numId);
-  await loadMagazines(); renderNumArea();
+  await loadAll();renderNumArea();
 }
- 
+
 async function toggleDroits(magId,numId,checked){
   const m=magazines.find(x=>x.id===magId);
-  const n=(m?.numeros||[]).find(x=>x.id===numId); if(!n) return;
+  const n=(m?.numeros||[]).find(x=>x.id===numId);if(!n)return;
   n.couts.droits=checked?0:0;
   await sb.from('numeros').update({couts:n.couts}).eq('id',numId);
-  await loadMagazines(); renderNumArea();
+  await loadAll();renderNumArea();
 }
- 
+
 async function updNumField(magId,numId,field,val){
-  const update={[field]:['mois','annee'].includes(field)?+val:val};
-  await sb.from('numeros').update(update).eq('id',numId);
-  await loadMagazines(); renderNumArea();
+  await sb.from('numeros').update({[field]:['mois','annee'].includes(field)?+val:val}).eq('id',numId);
+  await loadAll();renderNumArea();
 }
- 
+
 async function deleteNum(magId,numId){
-  if(!confirm('Supprimer ce numéro ?')) return;
+  if(!confirm('Supprimer ce numéro ?'))return;
   await sb.from('numeros').delete().eq('id',numId);
-  selNumId=null; await loadMagazines(); renderNumArea();
+  selNumId=null;await loadAll();renderNumArea();
 }
- 
+
 function triggerUpload(numId){document.getElementById('file-inp-'+numId)?.click();}
- 
+
 async function handleCover(magId,numId,input){
-  const file=input.files[0]; if(!file) return;
+  const file=input.files[0];if(!file)return;
   const ext=file.name.split('.').pop();
   const path=`covers/${numId}.${ext}`;
   const {error:upErr}=await sb.storage.from('covers').upload(path,file,{upsert:true});
   if(upErr){alert('Erreur upload: '+upErr.message);return;}
   const {data}=sb.storage.from('covers').getPublicUrl(path);
   await sb.from('numeros').update({cover_url:data.publicUrl}).eq('id',numId);
-  await loadMagazines(); renderNumArea();
+  await loadAll();renderNumArea();
 }
- 
+
 async function removeCover(magId,numId){
   await sb.from('numeros').update({cover_url:null}).eq('id',numId);
-  await loadMagazines(); renderNumArea();
+  await loadAll();renderNumArea();
 }
- 
+
 // ==================== COMPARAISON ====================
 function renderComparaison(){
-  const filters=document.getElementById('comp-filters'); if(!filters) return;
-  const active=Array.from(filters.querySelectorAll('.btn.active')).map(b=>b.dataset.id);
-  const selIds=active.length?active:magazines.map(m=>m.id);
-  filters.innerHTML=magazines.map(m=>`<button class="btn ${selIds.includes(m.id)?'active':''} btn-sm" data-id="${m.id}" onclick="toggleCompFilter('${m.id}')">${m.nom}</button>`).join('');
-  renderTimeline(selIds);
+  const pf=document.getElementById('pole-filters');
+  const cf=document.getElementById('comp-filters');
+  if(!pf||!cf)return;
+  const activePoles=Array.from(pf.querySelectorAll('.btn.active')).map(b=>b.dataset.id);
+  const activeMags=Array.from(cf.querySelectorAll('.btn.active')).map(b=>b.dataset.id);
+  pf.innerHTML=poles.map(p=>`<button class="btn ${activePoles.includes(p.id)||!activePoles.length?'active':''} btn-sm" data-id="${p.id}" style="border-left:3px solid ${p.couleur}" onclick="togglePoleFilter('${p.id}')">${p.nom}</button>`).join('');
+  const filteredMags=activePoles.length?magazines.filter(m=>activePoles.includes(m.pole_id)):magazines;
+  cf.innerHTML=filteredMags.map(m=>`<button class="btn ${activeMags.includes(m.id)||!activeMags.length?'active':''} btn-sm" data-id="${m.id}" onclick="toggleCompFilter('${m.id}')">${m.nom}</button>`).join('');
+  const selMagIds=Array.from(cf.querySelectorAll('.btn.active')).map(b=>b.dataset.id);
+  renderTimeline(selMagIds.length?selMagIds:filteredMags.map(m=>m.id));
 }
- 
+
+function togglePoleFilter(id){
+  const pf=document.getElementById('pole-filters');
+  pf.querySelector(`[data-id="${id}"]`).classList.toggle('active');
+  renderComparaison();
+}
+
 function toggleCompFilter(id){
-  const filters=document.getElementById('comp-filters');
-  filters.querySelector(`[data-id="${id}"]`).classList.toggle('active');
-  const active=Array.from(filters.querySelectorAll('.btn.active')).map(b=>b.dataset.id);
+  const cf=document.getElementById('comp-filters');
+  cf.querySelector(`[data-id="${id}"]`).classList.toggle('active');
+  const active=Array.from(cf.querySelectorAll('.btn.active')).map(b=>b.dataset.id);
   renderTimeline(active.length?active:magazines.map(m=>m.id));
 }
- 
+
 function renderTimeline(magIds){
-  const tv=document.getElementById('timeline-view'); if(!tv) return;
+  const tv=document.getElementById('timeline-view');if(!tv)return;
   const allNums=magazines.filter(m=>magIds.includes(m.id)).flatMap(m=>numsForYear(m).map(n=>({...n,_mag:m}))).sort((a,b)=>a.mois-b.mois);
-  if(!allNums.length){tv.innerHTML=`<div class="empty-year">Aucun numéro en ${selectedYear} pour les magazines sélectionnés</div>`;return;}
+  if(!allNums.length){tv.innerHTML=`<div class="empty-year">Aucun numéro en ${selectedYear} pour la sélection</div>`;return;}
   const maxAbs=Math.max(...allNums.map(n=>Math.abs(calcNum(n).net)),1);
   tv.innerHTML=`<div class="timeline">${allNums.map(n=>{
-    const c=calcNum(n);
-    const pct=Math.min(Math.abs(c.net)/maxAbs*100,100);
+    const c=calcNum(n);const pct=Math.min(Math.abs(c.net)/maxAbs*100,100);
+    const p=poles.find(x=>x.id===n._mag.pole_id);
     const coverHtml=n.cover_url?`<img src="${n.cover_url}" class="tl-cover" alt="${n.titre}">`:`<div class="tl-no-cover">📷</div>`;
-    return`<div class="tl-item">
+    return`<div class="tl-item" style="border-left:3px solid ${p?p.couleur:'#E5E5E3'}">
       ${coverHtml}
       <div>
         <div style="font-size:12px;font-weight:500">${n.titre}</div>
-        <div style="font-size:11px;color:#888;margin-top:2px">${n._mag.nom}</div>
+        <div style="font-size:11px;color:#888;margin-top:1px">${n._mag.nom}</div>
+        ${p?`<div style="font-size:10px;color:${p.couleur};margin-top:1px">${p.nom}</div>`:''}
         <span class="badge ${c.net>=0?'badge-pos':'badge-neg'}" style="margin-top:4px;display:inline-block">${c.net>=0?'+':''}${fmt(c.net)}</span>
       </div>
       <div>
@@ -695,38 +833,36 @@ function renderTimeline(magIds){
     </div>`;
   }).join('')}</div>`;
 }
- 
+
 // ==================== FRAIS GÉNÉRAUX ====================
 const FG_POSTES_DEFAULT=['Loyer / locaux','Salaires & charges fixes','Salaires transverses & coûts de structure','Téléphone / internet','Assurances','Comptabilité / juridique','Fournitures de bureau','Déplacements','Informatique / logiciels'];
 const PERIODICITES_FG={mensuel:12,bimestriel:6,trimestriel:4,semestriel:2,annuel:1};
- 
+
 function fgTotal(){return fgData.postes.reduce((a,p)=>a+(+p.montant||0),0);}
 function fgParutions(m){return PERIODICITES_FG[m.periodicite]||12;}
 function fgTotalParutions(){return fgData.magazines.reduce((a,m)=>a+fgParutions(m),0);}
 function fgQuotePartNum(){const tp=fgTotalParutions();return tp>0?fgTotal()/tp:0;}
- 
+
 async function loadFG(){
-  const label=document.getElementById('fg-annee-label');
-  if(label) label.textContent=selectedYear;
+  const label=document.getElementById('fg-annee-label');if(label)label.textContent=selectedYear;
   const {data}=await sb.from('frais_generaux').select('*').eq('annee',selectedYear).single();
-  if(data){
-    fgData={postes:data.postes||[],magazines:data.magazines||fgData.magazines};
-  } else {
+  if(data){fgData={postes:data.postes||[],magazines:data.magazines||fgData.magazines};}
+  else{
     fgData.postes=FG_POSTES_DEFAULT.map((l,i)=>({id:i+1,label:l,montant:0}));
-    if(!fgData.magazines.length) fgData.magazines=magazines.map(m=>({id:m.id,nom:m.nom,periodicite:m.periodicite||'mensuel'}));
+    if(!fgData.magazines.length)fgData.magazines=magazines.map(m=>({id:m.id,nom:m.nom,periodicite:m.periodicite||'mensuel'}));
   }
   renderFG();
 }
- 
+
 async function saveFG(){
   const {data:ex}=await sb.from('frais_generaux').select('id').eq('annee',selectedYear).single();
   const payload={annee:selectedYear,postes:fgData.postes,magazines:fgData.magazines};
-  if(ex) await sb.from('frais_generaux').update(payload).eq('annee',selectedYear);
+  if(ex)await sb.from('frais_generaux').update(payload).eq('annee',selectedYear);
   else await sb.from('frais_generaux').insert(payload);
 }
- 
+
 function renderFG(){renderFGKPIs();renderFGPostes();renderFGMags();renderFGRepartition();}
- 
+
 function renderFGKPIs(){
   const total=fgTotal(),tp=fgTotalParutions(),qpn=fgQuotePartNum();
   document.getElementById('fg-kpis').innerHTML=`
@@ -735,7 +871,7 @@ function renderFGKPIs(){
     <div class="metric-card"><div class="metric-label">Quote-part / numéro</div><div class="metric-value">${fmt(qpn)}</div></div>
   `;
 }
- 
+
 function renderFGPostes(){
   document.getElementById('fg-postes-list').innerHTML=fgData.postes.map(p=>`
     <div class="poste-row">
@@ -744,24 +880,16 @@ function renderFGPostes(){
       <button class="btn-sm btn-danger" onclick="deletePoste(${p.id})">✕</button>
     </div>`).join('');
 }
- 
-function setPosteMontant(id,val){
-  const p=fgData.postes.find(x=>x.id===id);
-  if(p){p.montant=val;saveFG();renderFG();}
-}
- 
+
+function setPosteMontant(id,val){const p=fgData.postes.find(x=>x.id===id);if(p){p.montant=val;saveFG();renderFG();}}
 function addPoste(){
   const inp=document.getElementById('new-poste-label');
-  const label=inp.value.trim(); if(!label) return;
+  const label=inp.value.trim();if(!label)return;
   fgData.postes.push({id:Date.now(),label,montant:0});
-  inp.value=''; saveFG();renderFG();
+  inp.value='';saveFG();renderFG();
 }
- 
-function deletePoste(id){
-  fgData.postes=fgData.postes.filter(p=>p.id!==id);
-  saveFG();renderFG();
-}
- 
+function deletePoste(id){fgData.postes=fgData.postes.filter(p=>p.id!==id);saveFG();renderFG();}
+
 function renderFGMags(){
   const total=fgTotal(),tp=fgTotalParutions();
   document.getElementById('fg-mag-list').innerHTML=fgData.magazines.map(m=>{
@@ -774,18 +902,10 @@ function renderFGMags(){
     </div>`;
   }).join('');
 }
- 
-function updFGMag(id,field,val){
-  const m=fgData.magazines.find(x=>x.id===id);
-  if(m){m[field]=val;saveFG();renderFG();}
-}
- 
-function addFGMag(){
-  fgData.magazines.push({id:'m'+Date.now(),nom:'Nouveau magazine',periodicite:'mensuel'});
-  saveFG();renderFG();
-  switchTab('fg-magazines','frais');
-}
- 
+
+function updFGMag(id,field,val){const m=fgData.magazines.find(x=>x.id===id);if(m){m[field]=val;saveFG();renderFG();}}
+function addFGMag(){fgData.magazines.push({id:'m'+Date.now(),nom:'Nouveau magazine',periodicite:'mensuel'});saveFG();renderFG();switchTab('fg-magazines','frais');}
+
 function renderFGRepartition(){
   const total=fgTotal(),tp=fgTotalParutions(),qpn=fgQuotePartNum();
   document.getElementById('fg-rep-kpis').innerHTML=`
@@ -802,14 +922,8 @@ function renderFGRepartition(){
     <tr style="font-weight:500"><td>Total</td><td style="text-align:right">${fmt(total)}</td>${fgData.magazines.map(()=>`<td style="text-align:right"><span class="badge-blue">${fmt(qpn)}</span></td>`).join('')}</tr>
   </tbody></table>`;
 }
- 
-// Il faut ajouter la colonne annee dans la table numeros si elle n'existe pas
-async function ensureAnneeColumn(){
-  await sb.rpc('ensure_annee_column').catch(()=>{});
-}
- 
+
 init();
 </script>
 </body>
 </html>
- 
