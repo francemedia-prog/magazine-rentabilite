@@ -278,7 +278,14 @@ function calcNum(n){
   const cout=Object.values(n.couts||{}).reduce((a,b)=>a+(+b||0),0);
   return{rev,cout,net:rev-cout,marge:rev>0?(rev-cout)/rev*100:0};
 }
-function numsForYear(mag){return(mag.numeros||[]).filter(n=>(n.annee||new Date().getFullYear())===selectedYear);}
+function numsForYear(mag){
+  return(mag.numeros||[]).filter(n=>{
+    // Si annee est null/undefined/0, on considère le numéro comme appartenant à l'année du mag ou à l'année courante
+    const y = n.annee ? +n.annee : null;
+    if(!y) return false; // Ignorer les numéros sans année définie dans les calculs de frais
+    return y === selectedYear;
+  });
+}
 
 // Nombre total de numéros sortis cette année (toute l'appli)
 function totalNumsSortis(){return magazines.flatMap(m=>numsForYear(m)).length;}
