@@ -96,175 +96,186 @@ tr:hover td{background:#F5F5F3}
 </style>
 </head>
 <body>
-
 <div class="topbar">
-  <div class="topbar-title">FranceMedia — Rentabilité</div>
-  <div class="year-selector">
-    <label>Année :</label>
-    <div id="year-btns" style="display:flex;gap:4px"></div>
-  </div>
-  <div id="conn-status" style="font-size:12px;color:#888">Connexion...</div>
+<div class="topbar-title">FranceMedia — Rentabilité</div>
+<div class="year-selector">
+<label>Année :</label>
+<div id="year-btns" style="display:flex;gap:4px"></div>
+</div>
+<div id="conn-status" style="font-size:12px;color:#888">Connexion...</div>
 </div>
 
 <div class="app-tabs">
-  <button class="app-tab active" onclick="switchApp('dashboard')">Dashboard magazines</button>
-  <button class="app-tab" onclick="switchApp('frais')">Frais généraux</button>
+<button class="app-tab active" onclick="switchApp('dashboard')">Dashboard magazines</button>
+<button class="app-tab" onclick="switchApp('frais')">Frais généraux</button>
 </div>
 
 <!-- DASHBOARD -->
 <div id="app-dashboard" class="main">
-  <div class="tabs">
-    <button class="tab active" onclick="switchTab('synthese','db')">Synthèse</button>
-    <button class="tab" onclick="switchTab('poles-view','db')">Pôles</button>
-    <button class="tab" onclick="switchTab('magazines','db')">Magazines</button>
-    <button class="tab" onclick="switchTab('numeros','db')">Numéros</button>
-    <button class="tab" onclick="switchTab('comparaison','db')">Comparaison</button>
-  </div>
+<div class="tabs">
+<button class="tab active" onclick="switchTab('synthese','db')">Synthèse</button>
+<button class="tab" onclick="switchTab('poles-view','db')">Pôles</button>
+<button class="tab" onclick="switchTab('magazines','db')">Magazines</button>
+<button class="tab" onclick="switchTab('numeros','db')">Numéros</button>
+<button class="tab" onclick="switchTab('comparaison','db')">Comparaison</button>
+</div>
 
-  <div id="synthese" class="section active">
-    <div style="background:#E6F1FB;border:1px solid #BDD7F5;border-radius:8px;padding:8px 14px;margin-bottom:1rem;font-size:13px;color:#0C447C" id="year-banner"></div>
-    <div class="grid4" id="kpi-cards"></div>
-    <div class="card" id="synth-chart-wrap">
-      <div class="section-label">Résultat net par numéro</div>
-      <div class="chart-wrap" style="height:240px"><canvas id="synthChart"></canvas></div>
-    </div>
-    <div class="card">
-      <div class="section-label">Résultat net par pôle</div>
-      <div class="chart-wrap" style="height:180px"><canvas id="poleChart"></canvas></div>
-    </div>
-    <div class="card">
-      <div class="section-label">Répartition revenus par source</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:center">
-        <div class="chart-wrap" style="height:180px"><canvas id="revSourceChart"></canvas></div>
-        <div id="rev-src-legend" style="font-size:12px;display:flex;flex-direction:column;gap:5px"></div>
-      </div>
-    </div>
-  </div>
+<div id="synthese" class="section active">
+<div style="background:#E6F1FB;border:1px solid #BDD7F5;border-radius:8px;padding:8px 14px;margin-bottom:1rem;font-size:13px;color:#0C447C" id="year-banner"></div>
+<div class="grid4" id="kpi-cards"></div>
+<div class="card" id="synth-chart-wrap">
+<div class="section-label">Résultat net par numéro</div>
+<div class="chart-wrap" style="height:240px"><canvas id="synthChart"></canvas></div>
+</div>
+<div class="card">
+<div class="section-label">Résultat net par pôle</div>
+<div class="chart-wrap" style="height:180px"><canvas id="poleChart"></canvas></div>
+</div>
+<div class="card">
+<div class="section-label">Répartition revenus par source</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:center">
+<div class="chart-wrap" style="height:180px"><canvas id="revSourceChart"></canvas></div>
+<div id="rev-src-legend" style="font-size:12px;display:flex;flex-direction:column;gap:5px"></div>
+</div>
+</div>
+</div>
 
-  <div id="poles-view" class="section">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
-      <div style="font-size:15px;font-weight:500">Pôles — <span id="poles-year-label"></span></div>
-      <button class="btn btn-primary btn-sm" onclick="showAddPole()">+ Nouveau pôle</button>
-    </div>
-    <div id="poles-add-form" style="display:none" class="card">
-      <div class="section-label">Nouveau pôle</div>
-      <div style="display:grid;grid-template-columns:1fr auto;gap:12px;margin-bottom:10px">
-        <div class="field" style="margin:0"><label>Nom du pôle</label><input type="text" id="new-pole-nom" placeholder="Ex: Pôle Moteur"></div>
-        <div class="field" style="margin:0"><label>Couleur</label><div style="display:flex;gap:6px;margin-top:8px" id="color-picker"></div></div>
-      </div>
-      <div style="display:flex;gap:8px">
-        <button class="btn btn-primary btn-sm" onclick="createPole()">Créer</button>
-        <button class="btn btn-sm" onclick="document.getElementById('poles-add-form').style.display='none'">Annuler</button>
-      </div>
-    </div>
-    <div id="poles-list-view"></div>
-  </div>
+<div id="poles-view" class="section">
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
+<div style="font-size:15px;font-weight:500">Pôles — <span id="poles-year-label"></span></div>
+<button class="btn btn-primary btn-sm" onclick="showAddPole()">+ Nouveau pôle</button>
+</div>
+<div id="poles-add-form" style="display:none" class="card">
+<div class="section-label">Nouveau pôle</div>
+<div style="display:grid;grid-template-columns:1fr auto;gap:12px;margin-bottom:10px">
+<div class="field" style="margin:0"><label>Nom du pôle</label><input type="text" id="new-pole-nom" placeholder="Ex: Pôle Moteur"></div>
+<div class="field" style="margin:0"><label>Couleur</label><div style="display:flex;gap:6px;margin-top:8px" id="color-picker"></div></div>
+</div>
+<div style="display:flex;gap:8px">
+<button class="btn btn-primary btn-sm" onclick="createPole()">Créer</button>
+<button class="btn btn-sm" onclick="document.getElementById('poles-add-form').style.display='none'">Annuler</button>
+</div>
+</div>
+<div id="poles-list-view"></div>
+</div>
 
-  <div id="magazines" class="section">
-    <div class="mag-sidebar">
-      <div>
-        <div class="section-label">Mes magazines</div>
-        <div class="mag-list" id="mag-list"></div>
-        <button class="btn btn-primary" style="width:100%;margin-top:8px" onclick="newMag()">+ Nouveau</button>
-      </div>
-      <div id="mag-form-area"><div class="empty-state">Sélectionnez un magazine</div></div>
-    </div>
-  </div>
+<div id="magazines" class="section">
+<div class="mag-sidebar">
+<div>
+<div class="section-label">Mes magazines</div>
+<div class="mag-list" id="mag-list"></div>
+<button class="btn btn-primary" style="width:100%;margin-top:8px" onclick="newMag()">+ Nouveau</button>
+</div>
+<div id="mag-form-area"><div class="empty-state">Sélectionnez un magazine</div></div>
+</div>
+</div>
 
-  <div id="numeros" class="section">
-    <div class="mag-sidebar">
-      <div>
-        <div class="section-label">Magazine</div>
-        <div class="mag-list" id="num-mag-list"></div>
-      </div>
-      <div id="num-area"><div class="empty-state">Sélectionnez un magazine</div></div>
-    </div>
-  </div>
+<div id="numeros" class="section">
+<div class="mag-sidebar">
+<div>
+<div class="section-label">Magazine</div>
+<div class="mag-list" id="num-mag-list"></div>
+</div>
+<div id="num-area"><div class="empty-state">Sélectionnez un magazine</div></div>
+</div>
+</div>
 
-  <div id="comparaison" class="section">
-    <div class="card" style="margin-bottom:1rem">
-      <div class="section-label" style="margin-bottom:6px">Filtrer par pôle</div>
-      <div id="pole-filters" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px"></div>
-      <div class="section-label" style="margin-bottom:6px">Filtrer par magazine</div>
-      <div id="comp-filters" style="display:flex;flex-wrap:wrap;gap:6px"></div>
-    </div>
-    <div id="timeline-view"></div>
-  </div>
+<div id="comparaison" class="section">
+<div class="card" style="margin-bottom:1rem">
+<div class="section-label" style="margin-bottom:6px">Filtrer par pôle</div>
+<div id="pole-filters" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px"></div>
+<div class="section-label" style="margin-bottom:6px">Filtrer par magazine</div>
+<div id="comp-filters" style="display:flex;flex-wrap:wrap;gap:6px"></div>
+</div>
+<div id="timeline-view"></div>
+</div>
 </div>
 
 <!-- FRAIS GÉNÉRAUX -->
 <div id="app-frais" class="main" style="display:none">
-  <div class="tabs">
-    <button class="tab active" onclick="switchTab('fg-groupe','fg')">Frais Groupe</button>
-    <button class="tab" onclick="switchTab('fg-poles','fg')">Frais par Pôle</button>
-    <button class="tab" onclick="switchTab('fg-repartition','fg')">Répartition</button>
-  </div>
+<div class="tabs">
+<button class="tab active" onclick="switchTab('fg-groupe','fg')">Frais Groupe</button>
+<button class="tab" onclick="switchTab('fg-poles','fg')">Frais par Pôle</button>
+<button class="tab" onclick="switchTab('fg-repartition','fg')">Répartition</button>
+</div>
 
-  <!-- FRAIS GROUPE -->
-  <div id="fg-groupe" class="section active">
-    <div class="card-dark" style="margin-bottom:1rem">
-      <div style="font-size:12px;opacity:.6;margin-bottom:8px;text-transform:uppercase;letter-spacing:.05em">Frais Groupe — <span id="fg-g-annee"></span></div>
-      <div style="display:flex;gap:2.5rem;flex-wrap:wrap">
-        <div><div style="font-size:11px;opacity:.5;margin-bottom:2px">TOTAL FRAIS GROUPE</div><div style="font-size:22px;font-weight:500" id="fg-g-total">—</div></div>
-        <div><div style="font-size:11px;opacity:.5;margin-bottom:2px">NUMÉROS SORTIS</div><div style="font-size:22px;font-weight:500" id="fg-g-nums">—</div></div>
-        <div><div style="font-size:11px;opacity:.5;margin-bottom:2px">QUOTE-PART / NUMÉRO</div><div style="font-size:22px;font-weight:500" id="fg-g-qpn">—</div></div>
-      </div>
-    </div>
-    <div class="card">
-      <div class="section-label">Postes de frais groupe (Direction, Loyers, EDF...)</div>
-      <div id="fg-g-postes"></div>
-      <div style="display:flex;gap:8px;margin-top:12px">
-        <input type="text" id="new-g-poste" placeholder="Nouveau poste groupe..." style="flex:1;font-size:13px;height:32px;border:1px solid #D5D5D3;border-radius:6px;padding:0 10px">
-        <button class="btn btn-primary btn-sm" onclick="addGroupePoste()">+ Ajouter</button>
-      </div>
-    </div>
-  </div>
+<div id="fg-groupe" class="section active">
+<div class="card-dark" style="margin-bottom:1rem">
+<div style="font-size:12px;opacity:.6;margin-bottom:8px;text-transform:uppercase;letter-spacing:.05em">Frais Groupe — <span id="fg-g-annee"></span></div>
+<div style="display:flex;gap:2.5rem;flex-wrap:wrap">
+<div><div style="font-size:11px;opacity:.5;margin-bottom:2px">TOTAL FRAIS GROUPE</div><div style="font-size:22px;font-weight:500" id="fg-g-total">—</div></div>
+<div><div style="font-size:11px;opacity:.5;margin-bottom:2px">NUMÉROS SORTIS</div><div style="font-size:22px;font-weight:500" id="fg-g-nums">—</div></div>
+<div><div style="font-size:11px;opacity:.5;margin-bottom:2px">QUOTE-PART / NUMÉRO</div><div style="font-size:22px;font-weight:500" id="fg-g-qpn">—</div></div>
+</div>
+</div>
+<div class="card">
+<div class="section-label">Postes de frais groupe (Direction, Loyers, EDF...)</div>
+<div id="fg-g-postes"></div>
+<div style="display:flex;gap:8px;margin-top:12px">
+<input type="text" id="new-g-poste" placeholder="Nouveau poste groupe..." style="flex:1;font-size:13px;height:32px;border:1px solid #D5D5D3;border-radius:6px;padding:0 10px">
+<button class="btn btn-primary btn-sm" onclick="addGroupePoste()">+ Ajouter</button>
+</div>
+</div>
+</div>
 
-  <!-- FRAIS PAR PÔLE -->
-  <div id="fg-poles" class="section">
-    <div style="background:#FEF3E6;border:1px solid #FDDCB5;border-radius:8px;padding:10px 14px;margin-bottom:1rem;font-size:13px;color:#7A3A00">
-      La quote-part de chaque pôle est calculée sur le nombre de numéros sortis dans ce pôle cette année.
-    </div>
-    <div id="fg-poles-list"></div>
-  </div>
+<div id="fg-poles" class="section">
+<div style="background:#FEF3E6;border:1px solid #FDDCB5;border-radius:8px;padding:10px 14px;margin-bottom:1rem;font-size:13px;color:#7A3A00">
+La quote-part de chaque pôle est calculée sur le nombre de numéros sortis dans ce pôle cette année.
+</div>
+<div id="fg-poles-list"></div>
+</div>
 
-  <!-- RÉPARTITION -->
-  <div id="fg-repartition" class="section">
-    <div class="card-dark" style="margin-bottom:1rem">
-      <div style="font-size:12px;opacity:.6;margin-bottom:8px;text-transform:uppercase;letter-spacing:.05em">Synthèse frais généraux — <span id="fg-r-annee"></span></div>
-      <div style="display:flex;gap:2.5rem;flex-wrap:wrap">
-        <div><div style="font-size:11px;opacity:.5;margin-bottom:2px">FRAIS GROUPE</div><div style="font-size:20px;font-weight:500" id="fg-r-groupe">—</div></div>
-        <div><div style="font-size:11px;opacity:.5;margin-bottom:2px">TOTAL FRAIS PÔLES</div><div style="font-size:20px;font-weight:500" id="fg-r-poles">—</div></div>
-        <div><div style="font-size:11px;opacity:.5;margin-bottom:2px">QP GROUPE / NUMÉRO</div><div style="font-size:20px;font-weight:500" id="fg-r-qpg">—</div></div>
-      </div>
-    </div>
-    <div id="fg-r-detail"></div>
-  </div>
+<div id="fg-repartition" class="section">
+<div class="card-dark" style="margin-bottom:1rem">
+<div style="font-size:12px;opacity:.6;margin-bottom:8px;text-transform:uppercase;letter-spacing:.05em">Synthèse frais généraux — <span id="fg-r-annee"></span></div>
+<div style="display:flex;gap:2.5rem;flex-wrap:wrap">
+<div><div style="font-size:11px;opacity:.5;margin-bottom:2px">FRAIS GROUPE</div><div style="font-size:20px;font-weight:500" id="fg-r-groupe">—</div></div>
+<div><div style="font-size:11px;opacity:.5;margin-bottom:2px">TOTAL FRAIS PÔLES</div><div style="font-size:20px;font-weight:500" id="fg-r-poles">—</div></div>
+<div><div style="font-size:11px;opacity:.5;margin-bottom:2px">QP GROUPE / NUMÉRO</div><div style="font-size:20px;font-weight:500" id="fg-r-qpg">—</div></div>
+</div>
+</div>
+<div id="fg-r-detail"></div>
+</div>
 </div>
 
 <script>
 const SUPABASE_URL='https://aepkcmwcbiunvwynjfbj.supabase.co';
 const SUPABASE_KEY='sb_publishable_6exNcCmj6e4fvBwt5oE1Aw_eTu6VZYx';
 const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
-
 const MOIS=['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
 const PERIODICITES={mensuel:12,bimestriel:6,trimestriel:4,semestriel:2,annuel:1};
 const POLE_COLORS=['#1A1A1A','#D85A30','#1D9E75','#378ADD','#D4537E','#7F77DD','#BA7517','#639922'];
+
+// *** MODIFICATION 1 : venteKiosque remplacé par venteKiosqueMetro + venteKiosqueExport ***
 const REV_KEYS=[
-  {k:'venteKiosque',l:'Ventes kiosque papier'},{k:'publicite',l:'Publicité'},
-  {k:'aboPapier',l:'Abonnements papier'},{k:'aboNumerique',l:'Abonnements numérique'},
-  {k:'aboCollecteurs',l:'Abonnements collecteurs'},{k:'kiosqueNumerique',l:'Kiosques numériques'},
+  {k:'venteKiosqueMetro',l:'Ventes kiosque Métro'},
+  {k:'venteKiosqueExport',l:'Ventes kiosque Export'},
+  {k:'publicite',l:'Publicité'},
+  {k:'aboPapier',l:'Abonnements papier'},
+  {k:'aboNumerique',l:'Abonnements numérique'},
+  {k:'aboCollecteurs',l:'Abonnements collecteurs'},
+  {k:'kiosqueNumerique',l:'Kiosques numériques'},
   {k:'licences',l:'Licences partenaires'},
 ];
+
+// *** MODIFICATION 2 : distribution remplacé par distributionFrance + distributionExport ***
 const COUT_KEYS=[
-  {k:'impression',l:'Impression'},{k:'papier',l:'Papier'},{k:'distribution',l:'Distribution'},
-  {k:'redaction',l:'Journalistes salariés'},{k:'sr',l:'Secrétariat de rédaction (SR)'},{k:'reglages',l:'Réglages'},{k:'edito',l:'Edito'},
-  {k:'marketing',l:'Marketing'},{k:'maquettes',l:'Maquettes'},
-  {k:'droits',l:'Droits d\'auteur / licences',toggle:true},{k:'fraisGeneraux',l:'Frais généraux'},
+  {k:'impression',l:'Impression'},
+  {k:'papier',l:'Papier'},
+  {k:'distributionFrance',l:'Distribution France'},
+  {k:'distributionExport',l:'Distribution Export'},
+  {k:'redaction',l:'Journalistes salariés'},
+  {k:'sr',l:'Secrétariat de rédaction (SR)'},
+  {k:'reglages',l:'Réglages'},
+  {k:'edito',l:'Edito'},
+  {k:'marketing',l:'Marketing'},
+  {k:'maquettes',l:'Maquettes'},
+  {k:'droits',l:'Droits d\'auteur / licences',toggle:true},
+  {k:'fraisGeneraux',l:'Frais généraux'},
 ];
+
 const FG_GROUPE_DEFAULT=['Direction générale','Loyers / locaux groupe','EDF / énergie','Téléphonie / internet','Assurances groupe','Comptabilité / juridique','Informatique / logiciels','Autres charges groupe'];
 const FG_POLE_DEFAULT=['Chef de pôle','Commercial du pôle'];
-
 let magazines=[],poles=[],fraisPoles={};
 let selMagId=null,selNumId=null,selNumMagId=null;
 let charts={};
@@ -280,27 +291,18 @@ function calcNum(n){
 }
 function numsForYear(mag){
   return(mag.numeros||[]).filter(n=>{
-    // Si annee est null/undefined/0, on considère le numéro comme appartenant à l'année du mag ou à l'année courante
     const y = n.annee ? +n.annee : null;
-    if(!y) return false; // Ignorer les numéros sans année définie dans les calculs de frais
+    if(!y) return false;
     return y === selectedYear;
   });
 }
-
-// Nombre total de numéros sortis cette année (toute l'appli)
 function totalNumsSortis(){return magazines.flatMap(m=>numsForYear(m)).length;}
-
-// Nombre de numéros sortis dans un pôle cette année
 function numsSortisPole(poleId){return magazines.filter(m=>m.pole_id===poleId).flatMap(m=>numsForYear(m)).length;}
-
-// Quote-part groupe par numéro = total frais groupe / total numéros sortis
 function qpGroupe(){
   const total=fgGroupe.postes.reduce((a,p)=>a+(+p.montant||0),0);
   const n=totalNumsSortis();
   return n>0?total/n:0;
 }
-
-// Quote-part pôle par numéro = total frais pôle / numéros sortis dans ce pôle
 function qpPoleById(poleId){
   if(!poleId)return 0;
   const fp=fraisPoles[poleId]||[];
@@ -308,7 +310,6 @@ function qpPoleById(poleId){
   const n=numsSortisPole(poleId);
   return n>0?total/n:0;
 }
-
 function calcMagYear(mag){
   const nums=numsForYear(mag);if(!nums.length)return{rev:0,cout:0,net:0,marge:0};
   const rev=nums.reduce((a,n)=>a+calcNum(n).rev,0);
@@ -335,7 +336,6 @@ function buildYearButtons(){
   if(banner)banner.textContent='Affichage de l\'année '+selectedYear;
   ['fg-g-annee','fg-r-annee','poles-year-label'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=selectedYear;});
 }
-
 async function setYear(y){selectedYear=y;buildYearButtons();renderAll();await loadFrais();}
 
 // ==================== NAVIGATION ====================
@@ -344,10 +344,8 @@ function switchApp(app){
   document.getElementById('app-frais').style.display=app==='frais'?'block':'none';
   document.querySelectorAll('.app-tab').forEach((t,i)=>t.classList.toggle('active',(i===0&&app==='dashboard')||(i===1&&app==='frais')));
 }
-
 const DB_SECTIONS=['synthese','poles-view','magazines','numeros','comparaison'];
 const FG_SECTIONS=['fg-groupe','fg-poles','fg-repartition'];
-
 function switchTab(name,ctx){
   const sections=ctx==='fg'?FG_SECTIONS:DB_SECTIONS;
   sections.forEach(s=>{const el=document.getElementById(s);if(el)el.classList.toggle('active',s===name);});
@@ -367,20 +365,17 @@ async function init(){
   await loadAll();
   await loadFrais();
 }
-
 async function loadAll(){
   const {data:pl}=await sb.from('poles').select('*').order('created_at');
   poles=pl||[];
   const {data:mags}=await sb.from('magazines').select('*').order('created_at');
   const {data:nums}=await sb.from('numeros').select('*').order('annee,mois');
   magazines=(mags||[]).map(m=>({...m,numeros:(nums||[]).filter(n=>n.magazine_id===m.id)}));
-  // Frais pôles
   const {data:fp}=await sb.from('frais_poles').select('*').eq('annee',selectedYear);
   fraisPoles={};(fp||[]).forEach(r=>{fraisPoles[r.pole_id]=r.postes||[];});
   buildYearButtons();
   renderAll();
 }
-
 async function loadFrais(){
   const {data}=await sb.from('frais_generaux').select('*').eq('annee',selectedYear).single();
   fgGroupe.postes=data?data.postes||[]:FG_GROUPE_DEFAULT.map((l,i)=>({id:i+1,label:l,montant:0}));
@@ -390,7 +385,6 @@ async function loadFrais(){
   renderFGPoles();
   renderFGRepartition();
 }
-
 function renderAll(){
   renderKPIs();
   renderSynthCharts();
@@ -419,8 +413,6 @@ function renderKPIs(){
 // ==================== GRAPHIQUES ====================
 function renderSynthCharts(){
   const allNums=magazines.flatMap(m=>numsForYear(m).map(n=>({...n,_mag:m}))).sort((a,b)=>a.mois-b.mois);
-
-  // Graphique numéros
   destroyChart('synth');
   const ctx=document.getElementById('synthChart');
   if(ctx){
@@ -437,8 +429,6 @@ function renderSynthCharts(){
           scales:{x:{grid:{display:false},ticks:{font:{size:11}}},y:{ticks:{callback:v=>fmt(v)}}}}});
     }
   }
-
-  // Graphique pôles
   destroyChart('pole');
   const poleCtx=document.getElementById('poleChart');
   if(poleCtx){
@@ -452,12 +442,10 @@ function renderSynthCharts(){
       options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
         scales:{x:{grid:{display:false}},y:{ticks:{callback:v=>fmt(v)}}}}});
   }
-
-  // Graphique revenus sources
   const srcTotals={};REV_KEYS.forEach(rk=>{srcTotals[rk.l]=0;});
   allNums.forEach(n=>{REV_KEYS.forEach(rk=>{srcTotals[rk.l]+=(+((n.revenus||{})[rk.k])||0);});});
   const srcVals=REV_KEYS.map(r=>srcTotals[r.l]);
-  const srcColors=['#1A1A1A','#1D9E75','#378ADD','#D85A30','#D4537E','#639922','#888'];
+  const srcColors=['#1A1A1A','#378ADD','#1D9E75','#D85A30','#D4537E','#639922','#7F77DD','#888'];
   destroyChart('revSrc');
   const ctx2=document.getElementById('revSourceChart');
   if(ctx2){
@@ -504,7 +492,6 @@ function renderPolesView(){
   const sansPole=magazines.filter(m=>!m.pole_id);
   if(sansPole.length)container.innerHTML+=`<div class="pole-card" style="border-left-color:#888;opacity:.7"><div style="font-size:13px;font-weight:500;color:#888;margin-bottom:6px">Sans pôle (${sansPole.length})</div><div style="display:flex;flex-wrap:wrap;gap:4px">${sansPole.map(m=>`<span style="font-size:12px;padding:3px 10px;border-radius:99px;background:#F0F0EE">${m.nom}</span>`).join('')}</div></div>`;
 }
-
 function showAddPole(){
   document.getElementById('poles-add-form').style.display='block';
   document.getElementById('color-picker').innerHTML=POLE_COLORS.map((c,i)=>
@@ -535,7 +522,6 @@ function groupByPole(){
   magazines.forEach(m=>{if(m.pole_id&&groups[m.pole_id])groups[m.pole_id].push(m);else groups['__none'].push(m);});
   return groups;
 }
-
 function renderMagList(){
   const groups=groupByPole();let html='';
   poles.forEach(p=>{
@@ -545,7 +531,6 @@ function renderMagList(){
   if(groups['__none'].length)html+=`<div class="pole-group"><div class="pole-group-label">Sans pôle</div>${groups['__none'].map(m=>magItemHTML(m)).join('')}</div>`;
   document.getElementById('mag-list').innerHTML=html||'<div style="color:#888;font-size:13px;padding:8px">Aucun magazine</div>';
 }
-
 function magItemHTML(m){
   const c=calcMagYear(m);const n=numsForYear(m).length;
   return`<div class="mag-item ${m.id===selMagId?'sel':''}" onclick="selectMag('${m.id}')">
@@ -554,9 +539,7 @@ function magItemHTML(m){
     <div style="margin-top:4px"><span class="badge ${c.net>=0?'badge-pos':'badge-neg'}">${n?(c.net>=0?'+':'')+fmt(c.net):'—'}</span></div>
   </div>`;
 }
-
 async function selectMag(id){selMagId=id;renderMagList();renderMagForm(magazines.find(x=>x.id===id));switchTab('magazines','db');}
-
 function renderMagForm(m){
   if(!m)return;
   const nums=numsForYear(m);const c=calcMagYear(m);
@@ -617,7 +600,6 @@ function renderMagForm(m){
     },50);
   }
 }
-
 async function updMagPole(id,poleId){await sb.from('magazines').update({pole_id:poleId||null}).eq('id',id);await loadAll();selectMag(id);}
 async function newMag(){
   const {data,error}=await sb.from('magazines').insert({nom:'Nouveau magazine',periodicite:'mensuel'}).select().single();
@@ -646,9 +628,7 @@ function renderNumMagList(){
   }
   document.getElementById('num-mag-list').innerHTML=html;
 }
-
 async function selectNumMag(id){selNumMagId=id;selNumId=null;renderNumMagList();renderNumArea();switchTab('numeros','db');}
-
 function renderNumArea(){
   const m=magazines.find(x=>x.id===selNumMagId);
   if(!m){document.getElementById('num-area').innerHTML='';return;}
@@ -671,7 +651,6 @@ function renderNumArea(){
   `;
   if(selNumId)renderNumDetail(selNumId);
 }
-
 function numCardHTML(n){
   const c=calcNum(n);const sel=n.id===selNumId?'sel':'';
   const cover=n.cover_url?`<img src="${n.cover_url}" class="num-cover" alt="${n.titre}">`:`<div class="num-cover-placeholder">Photo<span>Ajouter</span></div>`;
@@ -684,9 +663,7 @@ function numCardHTML(n){
     </div>
   </div>`;
 }
-
 function selectNum(id){selNumId=id;renderNumArea();}
-
 function renderNumDetail(numId){
   const m=magazines.find(x=>x.id===selNumMagId);if(!m)return;
   const n=(m.numeros||[]).find(x=>x.id===numId);if(!n)return;
@@ -730,7 +707,6 @@ function renderNumDetail(numId){
     </div>
   `;
 }
-
 async function addNum(magId){
   const m=magazines.find(x=>x.id===magId);if(!m)return;
   const taken=(m.numeros||[]).filter(n=>(n.annee||selectedYear)===selectedYear).map(n=>n.mois);
@@ -741,7 +717,6 @@ async function addNum(magId){
   if(error){alert('Erreur: '+error.message);return;}
   selNumId=data.id;await loadAll();renderNumArea();
 }
-
 async function updNum(magId,numId,type,key,val){
   const m=magazines.find(x=>x.id===magId);const n=(m?.numeros||[]).find(x=>x.id===numId);if(!n)return;
   if(type==='rev')n.revenus[key]=val;else n.couts[key]=val;
@@ -804,7 +779,7 @@ function renderTimeline(magIds){
         <span class="badge ${c.net>=0?'badge-pos':'badge-neg'}" style="margin-top:4px;display:inline-block">${c.net>=0?'+':''}${fmt(c.net)}</span>
       </div>
       <div><div class="tl-bar-wrap"><div class="tl-bar" style="width:${pct}%;background:${c.net>=0?'#1D9E75':'#D85A30'}"></div></div>
-        <div style="font-size:11px;color:#888;margin-top:4px">${fmt(c.rev)} rev. · ${fmt(c.cout)} coûts</div></div>
+      <div style="font-size:11px;color:#888;margin-top:4px">${fmt(c.rev)} rev. · ${fmt(c.cout)} coûts</div></div>
       <div style="text-align:right"><div class="${c.marge>=0?'positive':'negative'}" style="font-weight:500;font-size:13px">${c.marge.toFixed(1)}%</div><div style="color:#888;font-size:11px">marge</div></div>
     </div>`;
   }).join('')}</div>`;
@@ -817,7 +792,6 @@ async function saveGroupeFrais(){
   if(ex)await sb.from('frais_generaux').update(payload).eq('annee',selectedYear);
   else await sb.from('frais_generaux').insert(payload);
 }
-
 function renderFraisGroupe(){
   const total=fgGroupe.postes.reduce((a,p)=>a+(+p.montant||0),0);
   const nbNums=totalNumsSortis();
@@ -835,7 +809,6 @@ function renderFraisGroupe(){
       <button class="btn-sm btn-danger" onclick="delGPoste(${p.id})">X</button>
     </div>`).join('');
 }
-
 function setGPoste(id,val){const p=fgGroupe.postes.find(x=>x.id===id);if(p){p.montant=val;saveGroupeFrais();renderFraisGroupe();renderFGRepartition();}}
 function delGPoste(id){fgGroupe.postes=fgGroupe.postes.filter(p=>p.id!==id);saveGroupeFrais();renderFraisGroupe();renderFGRepartition();}
 function addGroupePoste(){
@@ -873,7 +846,6 @@ function renderFGPoles(){
     </div>`;
   }).join('');
 }
-
 function renderPolePostesHTML(poleId){
   const postes=fraisPoles[poleId]||[];
   if(!postes.length)return`<div style="color:#888;font-size:13px;padding:8px 0">Aucun poste — ex: Chef de pôle, Commercial du pôle...</div>`;
@@ -884,14 +856,12 @@ function renderPolePostesHTML(poleId){
       <button class="btn-sm btn-danger" onclick="delPolePoste('${poleId}',${p.id})">X</button>
     </div>`).join('');
 }
-
 async function savePolePoste(poleId){
   const {data:ex}=await sb.from('frais_poles').select('id').eq('pole_id',poleId).eq('annee',selectedYear).single();
   const payload={pole_id:poleId,annee:selectedYear,postes:fraisPoles[poleId]||[]};
   if(ex)await sb.from('frais_poles').update(payload).eq('pole_id',poleId).eq('annee',selectedYear);
   else await sb.from('frais_poles').insert(payload);
 }
-
 function setPolePoste(poleId,id,val){
   if(!fraisPoles[poleId])fraisPoles[poleId]=[];
   const p=fraisPoles[poleId].find(x=>x.id===id);
@@ -920,7 +890,6 @@ function renderFGRepartition(){
   const elQ=document.getElementById('fg-r-qpg');if(elQ)elQ.textContent=fmt(qpG)+'/numéro';
   const elA=document.getElementById('fg-r-annee');if(elA)elA.textContent=selectedYear;
   const container=document.getElementById('fg-r-detail');if(!container)return;
-
   container.innerHTML=`
     <div class="card" style="margin-bottom:1rem">
       <div style="font-size:14px;font-weight:600;margin-bottom:12px">Récapitulatif par magazine</div>
